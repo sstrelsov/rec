@@ -1,0 +1,1508 @@
+{
+  "payload": {
+    "pagination": {
+      "page_size": 250,
+      "offset": 0
+    },
+    "sort_order": "market_score",
+    "submarkets": [
+      {
+        "metrics": {
+          "market_score": 97.812,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2760",
+        "name": "Barryville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxiYXJyeXZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDYyMTA2fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxiYXJyeXZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDYyMTA2fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 97.654,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2642",
+        "name": "Kingston",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxraW5nc3RvbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAwMjYzOHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxraW5nc3RvbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAwMjYzOHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 97.319,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4822",
+        "name": "Grahamsville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxncmFoYW1zdmlsbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwODM2MDR8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxncmFoYW1zdmlsbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwODM2MDR8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 96.779,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4069",
+        "name": "Roxbury",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxyb3hidXJ5JTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDQxMzMxfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxyb3hidXJ5JTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDQxMzMxfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 96.099,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3358",
+        "name": "Cairo",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1541769740-098e80269166?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxjYWlybyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1MzAxOHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1578224034523-731a25929abc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxjYWlybyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1MzAxOHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 95.456,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1819",
+        "name": "Kerhonkson",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxrZXJob25rc29uJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDA1MzI4fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxrZXJob25rc29uJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDA1MzI4fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.985,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-308",
+        "name": "Lake Huntington",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1439066290691-510066268af5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxsYWtlJTIwaHVudGluZ3RvbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA4MTc4OHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxsYWtlJTIwaHVudGluZ3RvbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA4MTc4OHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.946,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2934",
+        "name": "Catskill",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxjYXRza2lsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAwNzk4OXww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxjYXRza2lsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAwNzk4OXww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.82,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2273",
+        "name": "Ellenville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxlbGxlbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU5NDUzfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxlbGxlbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU5NDUzfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.69,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1161",
+        "name": "Craryville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxjcmFyeXZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDg1NDAyfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxjcmFyeXZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDg1NDAyfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.585,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4462",
+        "name": "Athens",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxhdGhlbnMlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDc2MDl8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxhdGhlbnMlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDc2MDl8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.45,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1463",
+        "name": "Pine Hill",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxwaW5lJTIwaGlsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NDk4OHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxwaW5lJTIwaGlsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NDk4OHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.335,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-5637",
+        "name": "Narrowsburg",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxuYXJyb3dzYnVyZyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NDk4NXww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxuYXJyb3dzYnVyZyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NDk4NXww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 94.207,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2375",
+        "name": "New Paltz",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxuZXclMjBwYWx0eiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAyNjAyMHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxuZXclMjBwYWx0eiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAyNjAyMHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 93.585,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2406",
+        "name": "Smallwood",
+        "market_type": "rural",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxzbWFsbHdvb2QlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDEzMzR8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxzbWFsbHdvb2QlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDEzMzR8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 93.562,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-13",
+        "name": "Livingston Manor",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1506380459748-77ed039c2f88?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxsaXZpbmdzdG9uJTIwbWFub3IlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTg3ODV8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 92.653,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4330",
+        "name": "Gardiner",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxnYXJkaW5lciUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0MTMzOXww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxnYXJkaW5lciUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0MTMzOXww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 92.176,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4097",
+        "name": "Monticello",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxtb250aWNlbGxvJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDQyMjMwfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxtb250aWNlbGxvJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDQyMjMwfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 90.808,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-637",
+        "name": "Highland Falls",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxoaWdobGFuZCUyMGZhbGxzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDY1NjE1fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxoaWdobGFuZCUyMGZhbGxzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDY1NjE1fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 89.708,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3042",
+        "name": "Saugerties",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxzYXVnZXJ0aWVzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzEzOTk5MDI4fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxzYXVnZXJ0aWVzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzEzOTk5MDI4fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 89.608,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1286",
+        "name": "Callicoon",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxjYWxsaWNvb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNTIxMDV8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxjYWxsaWNvb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNTIxMDV8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 89.339,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4118",
+        "name": "Swan Lake",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1439066290691-510066268af5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxzd2FuJTIwbGFrZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA3NzI5Mnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxzd2FuJTIwbGFrZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA3NzI5Mnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 88.744,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1186",
+        "name": "Yonkers",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHx5b25rZXJzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDA5ODA5fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHx5b25rZXJzJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDA5ODA5fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 88.711,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1415",
+        "name": "Ghent",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxnaGVudCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA3OTk4Nnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxnaGVudCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA3OTk4Nnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 88.434,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2569",
+        "name": "Hudson",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxodWRzb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMDE3NDN8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxodWRzb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMDE3NDN8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 87.983,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3951",
+        "name": "Phoenicia",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxwaG9lbmljaWElMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTYxMDh8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxwaG9lbmljaWElMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTYxMDh8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 87.802,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3016",
+        "name": "Olivebridge",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxvbGl2ZWJyaWRnZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1NjU5Mnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxvbGl2ZWJyaWRnZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1NjU5Mnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 85.545,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2254",
+        "name": "Jewett",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxqZXdldHQlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTYxMTJ8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxqZXdldHQlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTYxMTJ8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 85.458,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3796",
+        "name": "Roscoe",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxyb3Njb2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjY5NjB8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxyb3Njb2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjY5NjB8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 85.236,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-757",
+        "name": "New Rochelle",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxuZXclMjByb2NoZWxsZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0MDUwNHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxuZXclMjByb2NoZWxsZSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0MDUwNHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 84.988,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1517",
+        "name": "Monroe",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxtb25yb2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjMzMjh8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxtb25yb2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjMzMjh8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 83.857,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4007",
+        "name": "Cold Spring",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1503919483171-9ffc1debc390?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxjb2xkJTIwc3ByaW5nJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU1Nzk3fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxjb2xkJTIwc3ByaW5nJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU1Nzk3fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 83.725,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-6590",
+        "name": "Copake",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxjb3Bha2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDg1MTV8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxjb3Bha2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNDg1MTV8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 82.985,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2640",
+        "name": "Middletown",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxtaWRkbGV0b3duJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDIyNDA2fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxtaWRkbGV0b3duJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDIyNDA2fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 82.253,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3848",
+        "name": "Goshen",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxnb3NoZW4lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNzYzOTF8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxnb3NoZW4lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNzYzOTF8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 80.934,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3350",
+        "name": "Margaretville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxtYXJnYXJldHZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDE1MTg4fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxtYXJnYXJldHZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDE1MTg4fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 78.981,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3563",
+        "name": "Mountain Dale",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1480497490787-505ec076689f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxtb3VudGFpbiUyMGRhbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNTQ3NzR8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1455156218388-5e61b526818b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxtb3VudGFpbiUyMGRhbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNTQ3NzR8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 77.529,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3179",
+        "name": "Putnam Valley",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxwdXRuYW0lMjB2YWxsZXklMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjQyMjd8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxwdXRuYW0lMjB2YWxsZXklMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjQyMjd8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 77.199,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4242",
+        "name": "Newburgh",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxuZXdidXJnaCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAzMDUzN3ww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxuZXdidXJnaCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAzMDUzN3ww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 76.104,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1033",
+        "name": "Chatham",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxjaGF0aGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDI2MDI2fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxjaGF0aGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDI2MDI2fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 75.833,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-766",
+        "name": "Ulster Park",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1686052903991-fedc0903ad4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHx1bHN0ZXIlMjBwYXJrJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc2Mzg5fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1622050956578-94fd044a0ada?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHx1bHN0ZXIlMjBwYXJrJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc2Mzg5fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 75.793,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1654",
+        "name": "Greenville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxncmVlbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc4MjQwfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxncmVlbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc4MjQwfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 75.401,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2051",
+        "name": "Greenwood Lake",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1439066290691-510066268af5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxncmVlbndvb2QlMjBsYWtlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU2NTkzfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1494500764479-0c8f2919a3d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxncmVlbndvb2QlMjBsYWtlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU2NTkzfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 74.968,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3427",
+        "name": "Red Hook",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1614622686704-f24cdef196a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxyZWQlMjBob29rJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDI0MjMzfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1611242320536-f12d3541249b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxyZWQlMjBob29rJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDI0MjMzfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 74.837,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-7575",
+        "name": "Parksville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxwYXJrc3ZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDYzMDM5fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxwYXJrc3ZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDYzMDM5fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 71.336,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3661",
+        "name": "Glen Spey",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxnbGVuJTIwc3BleSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1ODQ0N3ww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxnbGVuJTIwc3BleSUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1ODQ0N3ww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 71.317,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3689",
+        "name": "Hunter",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxodW50ZXIlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTM5OTU0Mzh8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxodW50ZXIlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTM5OTU0Mzh8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 70.764,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-6561",
+        "name": "Montgomery",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxtb250Z29tZXJ5JTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc4MjM2fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxtb250Z29tZXJ5JTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDc4MjM2fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 69.213,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1817",
+        "name": "Warwick",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHx3YXJ3aWNrJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU4NDUzfDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHx3YXJ3aWNrJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU4NDUzfDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 69.133,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1445",
+        "name": "Hillsdale",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxoaWxsc2RhbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMzQxMDN8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxoaWxsc2RhbGUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMzQxMDN8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 67.113,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1726",
+        "name": "Andes",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1485745352553-859d7a306fbd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxhbmRlcyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1MjExNnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1578224034523-731a25929abc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxhbmRlcyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA1MjExNnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 65.383,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-147",
+        "name": "Mount Vernon",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxtb3VudCUyMHZlcm5vbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAyNzgzNXww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxtb3VudCUyMHZlcm5vbiUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAyNzgzNXww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 64.799,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2662",
+        "name": "White Plains",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1596275281743-e7399c7bdfa9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMHBsYWlucyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAxNzAxNnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1554227231-54aa5db01c51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHx3aGl0ZSUyMHBsYWlucyUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAxNzAxNnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 62.887,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1547",
+        "name": "Wallkill",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHx3YWxsa2lsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA2Mzc4NHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHx3YWxsa2lsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA2Mzc4NHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 61.896,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1243",
+        "name": "Windham",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHx3aW5kaGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzEzOTk4MTI5fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHx3aW5kaGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzEzOTk4MTI5fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 61.529,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-263",
+        "name": "East Dutchess",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxlYXN0JTIwZHV0Y2hlc3MlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTM0MTB8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxlYXN0JTIwZHV0Y2hlc3MlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMTM0MTB8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 59.925,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4500",
+        "name": "Ancram",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxhbmNyYW0lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwOTg5NzJ8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxhbmNyYW0lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwOTg5NzJ8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 58.947,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-300",
+        "name": "Woodstock",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHx3b29kc3RvY2slMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMDI2MzZ8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHx3b29kc3RvY2slMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMDI2MzZ8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 58.826,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2661",
+        "name": "Beacon",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxiZWFjb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMzA1MzV8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxiZWFjb24lMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMzA1MzV8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 58.29,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3387",
+        "name": "Cornwall",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1534517535933-e38e7658663f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxjb3Jud2FsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA2NjUzNnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1578224034523-731a25929abc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxjb3Jud2FsbCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA2NjUzNnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 54.963,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-5686",
+        "name": "Highland",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxoaWdobGFuZCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NTkyN3ww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxoaWdobGFuZCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDA0NTkyN3ww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 54.482,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-998",
+        "name": "Germantown",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxnZXJtYW50b3duJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDY5MTc1fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxnZXJtYW50b3duJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDY5MTc1fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 53.8,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2302",
+        "name": "East Durham",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1652099256865-320244fc3e88?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwxfHxlYXN0JTIwZHVyaGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU2NTk3fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1578224034523-731a25929abc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0MzgzMTN8MHwxfHNlYXJjaHwzfHxlYXN0JTIwZHVyaGFtJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDU2NTk3fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 50.986,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-7564",
+        "name": "Poughkeepsie",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxwb3VnaGtlZXBzaWUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjYwMTZ8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxwb3VnaGtlZXBzaWUlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwMjYwMTZ8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 50.72,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2988",
+        "name": "Rhinebeck",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxyaGluZWJlY2slMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNjIxMTZ8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxyaGluZWJlY2slMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNjIxMTZ8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 49.095,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-2609",
+        "name": "Westchester",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHx3ZXN0Y2hlc3RlciUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAxNjExNHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHx3ZXN0Y2hlc3RlciUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAxNjExNHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 48.95,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4735",
+        "name": "White Lake",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1596367407372-96cb88503db6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHx3aGl0ZSUyMGxha2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNzM3MzR8MA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1638132035918-90a22beaab3b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHx3aGl0ZSUyMGxha2UlMkMlMjBsb3dlciUyMGh1ZHNvbiUyMHZhbGxleSUyQyUyMG55fGVufDB8MHx8fDE3MTQwNzM3MzR8MA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 48.191,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-1050",
+        "name": "Hyde Park",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1686052903991-fedc0903ad4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxoeWRlJTIwcGFyayUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDEwMjU1MHww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1622050956578-94fd044a0ada?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxoeWRlJTIwcGFyayUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDEwMjU1MHww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 46.42,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-7245",
+        "name": "Staatsburg",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwxfHxzdGFhdHNidXJnJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDUxMTc0fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0Mzc4NzN8MHwxfHNlYXJjaHwzfHxzdGFhdHNidXJnJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDUxMTc0fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 44.41,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-4821",
+        "name": "Thompsonville",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHx0aG9tcHNvbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDcwMTA4fDA&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHx0aG9tcHNvbnZpbGxlJTJDJTIwbG93ZXIlMjBodWRzb24lMjB2YWxsZXklMkMlMjBueXxlbnwwfDB8fHwxNzE0MDcwMTA4fDA&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      },
+      {
+        "metrics": {
+          "market_score": 43.93,
+          "revenue": null,
+          "booked": null,
+          "daily_rate": null,
+          "revpar": null
+        },
+        "id": "airdna-3917",
+        "name": "Rockland",
+        "market_type": "mountains_lakes",
+        "parent_market_name": "Lower Hudson Valley",
+        "market_id": "airdna-62",
+        "images": [
+          "https://images.unsplash.com/photo-1603708088953-8d7475cd33db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwxfHxyb2NrbGFuZCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAzNDEwMnww&ixlib=rb-4.0.3&q=100&w=400",
+          "https://images.unsplash.com/photo-1589295041496-2c1442eaf2e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTI4MzJ8MHwxfHNlYXJjaHwzfHxyb2NrbGFuZCUyQyUyMGxvd2VyJTIwaHVkc29uJTIwdmFsbGV5JTJDJTIwbnl8ZW58MHwwfHx8MTcxNDAzNDEwMnww&ixlib=rb-4.0.3&q=100&w=400"
+        ],
+        "region_type": null,
+        "geospatial": null,
+        "country_code": "us"
+      }
+    ]
+  },
+  "status": {
+    "code": "EXPLORER-S-000",
+    "message": "Success",
+    "human": "Success",
+    "type": "success"
+  }
+}

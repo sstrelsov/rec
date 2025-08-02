@@ -1,0 +1,551 @@
+{
+  "payload": {
+    "permission": "full",
+    "load_city": null,
+    "property_details": {
+      "address_city_id": 73578,
+      "address_region_id": [
+        13895
+      ],
+      "address": "107 Overlook Road, Woodbourne, NY, USA",
+      "address_lookup": "107 OVERLOOK RD, WOODBOURNE, NY 12788",
+      "zipcode": "12788",
+      "bedrooms": 3,
+      "bathrooms": 1.0,
+      "accommodates": 6,
+      "property_value": 178604,
+      "location": {
+        "lat": 41.84025,
+        "lng": -74.594
+      },
+      "currency_symbol": "$"
+    },
+    "compset_amenities": {
+      "percent_with_tv": 0.7142857142857143,
+      "percent_with_gym": 0.0,
+      "percent_with_pool": 0.0,
+      "percent_with_dryer": 0.5714285714285714,
+      "percent_with_aircon": 0.5714285714285714,
+      "percent_with_hottub": 0.0,
+      "percent_with_washer": 0.5714285714285714,
+      "percent_with_doorman": 0.0,
+      "percent_with_heating": 1.0,
+      "percent_with_kitchen": 1.0,
+      "percent_with_parking": 1.0,
+      "percent_with_smoking": 0.0,
+      "percent_with_cable_tv": 0.0,
+      "percent_with_elevator": 0.0,
+      "percent_with_intercom": 0.0,
+      "percent_with_internet": 1.0,
+      "percent_with_breakfast": 0.0,
+      "percent_with_guidebook": 0.0,
+      "percent_with_pets_allowed": 0.7142857142857143,
+      "percent_with_family_friendly": 0.42857142857142855,
+      "percent_with_handicap_access": 0.0,
+      "percent_with_indoor_fireplace": 0.42857142857142855,
+      "percent_with_wireless_internet": 1.0,
+      "percent_with_suitable_for_events": 0.14285714285714285,
+      "percent_with_ev_charger": 0.0
+    },
+    "comps": [
+      {
+        "airbnb_property_id": "839878798241268495",
+        "cover_img": "https://a0.muscache.com/im/pictures/miso/Hosting-839878798241268495/original/a571f023-9a11-4be4-ab2f-c346354ae744.jpeg",
+        "title": "Cozy Catskills Cabin with Grill & Fire Pit",
+        "room_type": "Entire home/apt",
+        "property_type": "House",
+        "reviews": 145,
+        "rating": 5.0,
+        "distance_meters": 117,
+        "platforms": {
+          "airbnb_property_id": "839878798241268495",
+          "vrbo_property_id": null
+        },
+        "listing_url": "https://www.airbnb.com/rooms/839878798241268495",
+        "location": {
+          "lat": 41.83948,
+          "lng": -74.59497
+        },
+        "bedrooms": 3.0,
+        "bathrooms": 1.0,
+        "accommodates": 6.0,
+        "stats": {
+          "revenue": {
+            "ltm": 50808
+          },
+          "revenue_potential": {
+            "ltm": 51810
+          },
+          "adr": {
+            "ltm": 179
+          },
+          "days_available": {
+            "ltm": 358
+          },
+          "days_reserved": {
+            "ltm": 283
+          },
+          "occupancy": {
+            "ltm": 0.79
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "1339288123596212686",
+        "cover_img": "https://a0.muscache.com/im/pictures/hosting/Hosting-1339288123596212686/original/91d7436e-3683-4149-a344-65bdcd721d30.jpeg",
+        "title": "Cozy Cabin, lake access, kayak & dog friendly",
+        "room_type": "Entire home/apt",
+        "property_type": "Cabin",
+        "reviews": 33,
+        "rating": 4.7,
+        "distance_meters": 233,
+        "platforms": {
+          "airbnb_property_id": "1339288123596212686",
+          "vrbo_property_id": "2788670"
+        },
+        "listing_url": "https://www.airbnb.com/rooms/1339288123596212686",
+        "location": {
+          "lat": 41.8381733211,
+          "lng": -74.594403676
+        },
+        "bedrooms": 3.0,
+        "bathrooms": 1.0,
+        "accommodates": 5.0,
+        "stats": {
+          "revenue": {
+            "ltm": 24761
+          },
+          "revenue_potential": {
+            "ltm": 29133
+          },
+          "adr": {
+            "ltm": 160
+          },
+          "days_available": {
+            "ltm": 290
+          },
+          "days_reserved": {
+            "ltm": 154
+          },
+          "occupancy": {
+            "ltm": 0.53
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "16134974",
+        "cover_img": "https://a0.muscache.com/im/pictures/befe291d-0349-4ce6-ac54-2e9d16632447.jpg",
+        "title": "Cozy Catskills Lakefront Cottage",
+        "room_type": "Entire home/apt",
+        "property_type": "Cottage",
+        "reviews": 712,
+        "rating": 4.8,
+        "distance_meters": 233,
+        "platforms": {
+          "airbnb_property_id": "16134974",
+          "vrbo_property_id": null
+        },
+        "listing_url": "https://www.airbnb.com/rooms/16134974",
+        "location": {
+          "lat": 41.83989,
+          "lng": -74.59677
+        },
+        "bedrooms": 2.0,
+        "bathrooms": 1.0,
+        "accommodates": 4.0,
+        "stats": {
+          "revenue": {
+            "ltm": 46796
+          },
+          "revenue_potential": {
+            "ltm": 46796
+          },
+          "adr": {
+            "ltm": 160
+          },
+          "days_available": {
+            "ltm": 365
+          },
+          "days_reserved": {
+            "ltm": 292
+          },
+          "occupancy": {
+            "ltm": 0.8
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "1184731863620408991",
+        "cover_img": "https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTE4NDczMTg2MzYyMDQwODk5MQ==/original/7355c2c3-e69f-4bf2-bcdd-78dcf304f3ed.jpeg",
+        "title": "Cozy Cottage:Perfect Catskills Getaway",
+        "room_type": "Entire home/apt",
+        "property_type": "House",
+        "reviews": 12,
+        "rating": 5.0,
+        "distance_meters": 402,
+        "platforms": {
+          "airbnb_property_id": "1184731863620408991",
+          "vrbo_property_id": null
+        },
+        "listing_url": "https://www.airbnb.com/rooms/1184731863620408991",
+        "location": {
+          "lat": 41.8423164035,
+          "lng": -74.5979823545
+        },
+        "bedrooms": 2.0,
+        "bathrooms": 1.0,
+        "accommodates": 4.0,
+        "stats": {
+          "revenue": {
+            "ltm": 17760
+          },
+          "revenue_potential": {
+            "ltm": 18003
+          },
+          "adr": {
+            "ltm": 261
+          },
+          "days_available": {
+            "ltm": 335
+          },
+          "days_reserved": {
+            "ltm": 68
+          },
+          "occupancy": {
+            "ltm": 0.2
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "36701749",
+        "cover_img": "https://a0.muscache.com/im/pictures/miso/Hosting-36701749/original/3afc9e52-488d-49e0-b61c-144a6e8ecb0d.jpeg",
+        "title": "Catskills Overlook Mountain Sanctuary",
+        "room_type": "Entire home/apt",
+        "property_type": "Cabin",
+        "reviews": 200,
+        "rating": 5.0,
+        "distance_meters": 446,
+        "platforms": {
+          "airbnb_property_id": "36701749",
+          "vrbo_property_id": null
+        },
+        "listing_url": "https://www.airbnb.com/rooms/36701749",
+        "location": {
+          "lat": 41.84203,
+          "lng": -74.59882
+        },
+        "bedrooms": 2.0,
+        "bathrooms": 1.5,
+        "accommodates": 4.0,
+        "stats": {
+          "revenue": {
+            "ltm": 69076
+          },
+          "revenue_potential": {
+            "ltm": 73804
+          },
+          "adr": {
+            "ltm": 258
+          },
+          "days_available": {
+            "ltm": 345
+          },
+          "days_reserved": {
+            "ltm": 267
+          },
+          "occupancy": {
+            "ltm": 0.77
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "1172508374810110025",
+        "cover_img": "https://a0.muscache.com/im/pictures/airflow/Hosting-994900381353365583/original/a5542b84-33a4-4bb6-b7fa-2933a330817b.jpg",
+        "title": "Escape to Nature - Hidden Gem",
+        "room_type": "Entire home/apt",
+        "property_type": "House",
+        "reviews": 6,
+        "rating": 3.6,
+        "distance_meters": 579,
+        "platforms": {
+          "airbnb_property_id": "1172508374810110025",
+          "vrbo_property_id": null
+        },
+        "listing_url": "https://www.airbnb.com/rooms/1172508374810110025",
+        "location": {
+          "lat": 41.84383,
+          "lng": -74.59907
+        },
+        "bedrooms": 4.0,
+        "bathrooms": 2.0,
+        "accommodates": 10.0,
+        "stats": {
+          "revenue": {
+            "ltm": 43580
+          },
+          "revenue_potential": {
+            "ltm": 44360
+          },
+          "adr": {
+            "ltm": 223
+          },
+          "days_available": {
+            "ltm": 327
+          },
+          "days_reserved": {
+            "ltm": 195
+          },
+          "occupancy": {
+            "ltm": 0.6
+          }
+        }
+      },
+      {
+        "airbnb_property_id": "994900381353365583",
+        "cover_img": "https://a0.muscache.com/im/pictures/airflow/Hosting-994900381353365583/original/f1106b91-8974-4094-bfcd-4cd821810e7d.jpg",
+        "title": "Serene Catskills Retreat w/ Deck",
+        "room_type": "Entire home/apt",
+        "property_type": "House",
+        "reviews": 38,
+        "rating": 4.5,
+        "distance_meters": 580,
+        "platforms": {
+          "airbnb_property_id": "994900381353365583",
+          "vrbo_property_id": "3735104"
+        },
+        "listing_url": "https://www.airbnb.com/rooms/994900381353365583",
+        "location": {
+          "lat": 41.8432072,
+          "lng": -74.5997584
+        },
+        "bedrooms": 4.0,
+        "bathrooms": 2.0,
+        "accommodates": 10.0,
+        "stats": {
+          "revenue": {
+            "ltm": 66211
+          },
+          "revenue_potential": {
+            "ltm": 66372
+          },
+          "adr": {
+            "ltm": 229
+          },
+          "days_available": {
+            "ltm": 364
+          },
+          "days_reserved": {
+            "ltm": 289
+          },
+          "occupancy": {
+            "ltm": 0.79
+          }
+        }
+      }
+    ],
+    "target_ads": {},
+    "combined_market_info": {
+      "airdna_market_name": "Lower Hudson Valley",
+      "market_type": "mountains_lakes",
+      "market_score": 81.169,
+      "city_name": null,
+      "country_id": "1",
+      "country_code": "us",
+      "market_id": "airdna-62",
+      "submarket_id": "airdna-4822",
+      "airdna_submarket_name": "Grahamsville",
+      "region_name": null,
+      "submarket_score": 97.319
+    },
+    "is_custom_comps": false,
+    "property_statistics": {
+      "revenue": {
+        "ltm": 46721,
+        "revenue_years": {
+          "2025": {
+            "7": 5492.0,
+            "8": 5341.0,
+            "9": 4026.0,
+            "10": 4795.0,
+            "11": 3356.0,
+            "12": 3520.0
+          },
+          "2026": {
+            "1": 2787.0,
+            "2": 2686.0,
+            "3": 3145.0,
+            "4": 3658.0,
+            "5": 3944.0,
+            "6": 3971.0
+          }
+        }
+      },
+      "cleaning_fee": {
+        "ltm": 8548.453043734526,
+        "cleaning_fee_years": {
+          "2025": {
+            "7": 995.7416766947453,
+            "8": 851.1997346977449,
+            "9": 804.1922403003755,
+            "10": 801.0,
+            "11": 672.2078078078079,
+            "12": 615.796766743649
+          },
+          "2026": {
+            "1": 551.8608759661391,
+            "2": 556.4374278013092,
+            "3": 679.2212041884817,
+            "4": 764.1301104148016,
+            "5": 626.827067669173,
+            "6": 629.8381314502988
+          }
+        }
+      },
+      "adr": {
+        "ltm": 199,
+        "adr_years": {
+          "2025": {
+            "7": 206.38,
+            "8": 210.0,
+            "9": 216.65,
+            "10": 200.68,
+            "11": 222.43,
+            "12": 209.87
+          },
+          "2026": {
+            "1": 185.07,
+            "2": 207.47,
+            "3": 202.87,
+            "4": 162.15,
+            "5": 179.96,
+            "6": 190.35
+          }
+        }
+      },
+      "occupancy": {
+        "ltm": 0.64,
+        "occupancy_years": {
+          "2025": {
+            "7": 0.86,
+            "8": 0.82,
+            "9": 0.62,
+            "10": 0.77,
+            "11": 0.5,
+            "12": 0.54
+          },
+          "2026": {
+            "1": 0.49,
+            "2": 0.46,
+            "3": 0.5,
+            "4": 0.75,
+            "5": 0.71,
+            "6": 0.7
+          }
+        }
+      },
+      "total_comps": 7,
+      "historical_valuation": {
+        "2023": {
+          "7": 56167,
+          "8": 55270,
+          "9": 54695,
+          "10": 53804,
+          "11": 52786,
+          "12": 52439
+        },
+        "2024": {
+          "1": 51973,
+          "2": 52706,
+          "3": 51333,
+          "4": 52145,
+          "5": 52125,
+          "6": 50345,
+          "7": 49956,
+          "8": 49989,
+          "9": 49404,
+          "10": 49499,
+          "11": 49245,
+          "12": 48638
+        },
+        "2025": {
+          "1": 47821,
+          "2": 46078,
+          "3": 46500,
+          "4": 46582,
+          "5": 46147,
+          "6": 46721
+        },
+        "mom_perc_chg": 1.24,
+        "yoy_perc_chg": -7.2
+      },
+      "revenue_range": {
+        "2025": {
+          "7": {
+            "upper": 5597,
+            "lower": 5386
+          },
+          "8": {
+            "upper": 5573,
+            "lower": 5108
+          },
+          "9": {
+            "upper": 4253,
+            "lower": 3798
+          },
+          "10": {
+            "upper": 5001,
+            "lower": 4588
+          },
+          "11": {
+            "upper": 3547,
+            "lower": 3164
+          },
+          "12": {
+            "upper": 3737,
+            "lower": 3302
+          }
+        },
+        "2026": {
+          "1": {
+            "upper": 2934,
+            "lower": 2639
+          },
+          "2": {
+            "upper": 2799,
+            "lower": 2572
+          },
+          "3": {
+            "upper": 3275,
+            "lower": 3014
+          },
+          "4": {
+            "upper": 3859,
+            "lower": 3456
+          },
+          "5": {
+            "upper": 4176,
+            "lower": 3711
+          },
+          "6": {
+            "upper": 4181,
+            "lower": 3760
+          }
+        },
+        "ltm": {
+          "upper": 48938,
+          "lower": 44503
+        }
+      },
+      "confidence_score": {
+        "score": 58.65,
+        "level": "Med"
+      }
+    }
+  },
+  "status": {
+    "code": "EXPLORER-S-011",
+    "message": "Successfully retrieved Rentalizer data for the requested address.",
+    "human": "Successfully retrieved Rentalizer data for the requested address.",
+    "type": "success"
+  }
+}
