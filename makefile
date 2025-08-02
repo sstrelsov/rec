@@ -177,7 +177,7 @@ clean:
 		$(MAKE) stop; \
 	fi
 	@rm -rf $(OUTPUT_DIR)
-	@rm -f *.pyc __pycache__ .DS_Store
+	@rm -rf *.pyc __pycache__ .DS_Store
 	@echo "$(GREEN)✅ All files removed$(NC)"
 
 # Run in basic mode (no enhanced features)

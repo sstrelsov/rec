@@ -1,8 +1,8 @@
-# MITM Tool Addons Package
-# Collection of specialized mitmproxy addons for enhanced traffic analysis
+#!/usr/bin/env python3
+"""
+addons package - Enhanced mitmproxy addons for API analysis
+"""
 
-from .traffic_analyzer import TrafficAnalyzer
-from .api_extractor import APIExtractor
-from .api_timeline import APITimeline
+from .context_detector import detect_request_context, RequestContext
 
-__all__ = ['TrafficAnalyzer', 'APIExtractor', 'APITimeline']
+__all__ = ['detect_request_context', 'RequestContext']

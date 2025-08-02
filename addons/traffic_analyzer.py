@@ -18,6 +18,11 @@ import logging
 from collections import defaultdict
 from typing import Dict, List, Any, Optional
 from mitmproxy import http, ctx
+import sys
+
+import config
+sys.path.append('.')
+from addons.context_detector import detect_request_context, RequestContext, get_context_info
 
 
 class TrafficAnalyzer:
@@ -29,19 +34,8 @@ class TrafficAnalyzer:
         self.method_stats = defaultdict(int)
         self.status_stats = defaultdict(int)
         self.content_type_stats = defaultdict(int)
+        self.context_stats = defaultdict(int)
         self.response_times = []
-
-        # Ads/Analytics blocklist
-        self.blocked_patterns = {
-            'google-analytics.com', 'googleanalytics.com', 'google-analytics',
-            'gtag', 'gtm.js', 'ga.js', '_ga', '/analytics/', '/tracking/',
-            'mixpanel.com', 'amplitude.com', 'segment.com', 'segment.io',
-            'hotjar.com', 'fullstory.com', 'logrocket.com', 'datadog',
-            'googlesyndication.com', 'doubleclick.net', 'googleadservices.com',
-            'facebook.com/tr', 'connect.facebook.net', 'facebook.net',
-            '/pixel.gif', '/collect?', '/tr?', '/ads/', '/ad/', '/tracking',
-            '/analytics', '/metrics', '/telemetry', '/beacon', '/ping'
-        }
 
         # Performance tracking
         self.slow_requests = []
@@ -134,7 +128,7 @@ class TrafficAnalyzer:
         path = flow.request.path.lower()
 
         # Check against blocked patterns
-        for pattern in self.blocked_patterns:
+        for pattern in config.blocked_patterns:
             if pattern in url or pattern in host or pattern in path:
                 return True
 
@@ -187,6 +181,10 @@ class TrafficAnalyzer:
         # Method stats
         self.method_stats[flow.request.method] += 1
 
+        # Context stats
+        context = detect_request_context(flow)
+        self.context_stats[context.value] += 1
+
         # Status code stats
         if flow.response:
             self.status_stats[flow.response.status_code] += 1
@@ -224,6 +222,13 @@ class TrafficAnalyzer:
             for status, count in sorted(self.status_stats.items()):
                 logging.info(f"  • {status}: {count}")
 
+        # Request context distribution
+        if self.context_stats:
+            logging.info("🎯 Request Context:")
+            for context, count in sorted(self.context_stats.items()):
+                icon = "🌐" if context == "browser" else "⚡" if context == "api" else "❓"
+                logging.info(f"  • {icon} {context.title()}: {count}")
+
         # Performance alerts
         if self.slow_requests:
             recent_slow = self.slow_requests[-3:]  # Last 3 slow requests
@@ -251,6 +256,7 @@ class TrafficAnalyzer:
             'methods': dict(self.method_stats),
             'status_codes': dict(self.status_stats),
             'content_types': dict(self.content_type_stats),
+            'contexts': dict(self.context_stats),
             'avg_response_time_ms': avg_response_time,
             'slow_requests_count': len(self.slow_requests),
             'large_responses_count': len(self.large_responses),

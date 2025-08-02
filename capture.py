@@ -420,7 +420,11 @@ class TrafficCapture:
 
         method = flow.get('method', 'GET').lower()
         path = self._sanitize_name(flow.get('path', '/'))
-        base_name = f"{method}_{path}"
+
+        # Include context in the directory name for better organization
+        context = flow.get('context', 'unknown')
+        context_prefix = "api" if context == "api" else "browser" if context == "browser" else "unknown"
+        base_name = f"{context_prefix}_{method}_{path}"
 
         # Handle duplicate names
         if domain not in domain_counters:
@@ -432,13 +436,18 @@ class TrafficCapture:
         call_dir = domain_dir / call_name
         call_dir.mkdir(exist_ok=True)
 
+        # Write context metadata
+        self._write_context_metadata(flow, call_dir)
+
         # Write HTTPie command
         self._write_httpie_command(flow, call_dir)
 
         # Write response
         self._write_response_file(flow, call_dir)
 
-        print(f"📁 {domain}/{call_name} - {method.upper()} {flow.get('path', '/')} -> {flow.get('status_code', '?')}")
+        # Enhanced status display with context
+        context_icon = "⚡" if context == "api" else "🌐" if context == "browser" else "❓"
+        print(f"📁 {domain}/{call_name} - {context_icon} {method.upper()} {flow.get('path', '/')} -> {flow.get('status_code', '?')}")
 
     def _sanitize_name(self, name: str) -> str:
         """Convert name to safe directory/file name."""
@@ -536,6 +545,30 @@ class TrafficCapture:
         }
         return extensions.get(ct, '.txt')
 
+    def _write_context_metadata(self, flow: Dict[str, Any], call_dir: Path) -> None:
+        """Write context metadata file with information about the request type."""
+        context = flow.get('context', 'unknown')
+        context_info = {
+            'browser': {'name': 'Browser', 'icon': '🌐', 'description': 'User browsing web pages, loading static assets'},
+            'api': {'name': 'API', 'icon': '⚡', 'description': 'Frontend-backend or app-to-app communication'},
+            'unknown': {'name': 'Unknown', 'icon': '❓', 'description': 'Could not determine request context'}
+        }.get(context, {'name': 'Unknown', 'icon': '❓', 'description': 'Could not determine request context'})
+
+        metadata = {
+            'context': context,
+            'context_name': context_info['name'],
+            'context_icon': context_info['icon'],
+            'context_description': context_info['description'],
+            'timestamp': flow.get('timestamp', ''),
+            'method': flow.get('method', ''),
+            'url': flow.get('url', ''),
+            'status_code': flow.get('status_code', ''),
+            'response_size': flow.get('response_size', 0)
+        }
+
+        metadata_file = call_dir / 'metadata.json'
+        with open(metadata_file, 'w') as f:
+            json.dump(metadata, f, indent=2)
 
     def _show_organization_summary(self, output_path: Path) -> None:
         """Show summary of organized API calls."""

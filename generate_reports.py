@@ -76,7 +76,7 @@ def generate_reports_from_file(dump_file: str, output_dir: str = "output"):
             # Process through timeline generator
             try:
                 if not timeline_generator._is_blocked_traffic(mock_flow):
-                    if timeline_generator._is_api_traffic(mock_flow):
+                    if timeline_generator._should_include_request(mock_flow):
                         timeline_generator._record_api_call(mock_flow)
                         timeline_count += 1
             except Exception as e:

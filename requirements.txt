@@ -3,6 +3,7 @@
 
 # Core mitmproxy for traffic capture and analysis
 mitmproxy>=10.0.0
+requests
 
 # Standard library modules used:
 # - subprocess (built-in)

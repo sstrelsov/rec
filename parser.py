@@ -9,6 +9,7 @@ import subprocess
 import os
 import json
 from typing import List, Dict, Any, Optional
+from addons.context_detector import detect_request_context, RequestContext
 
 
 class FlowParser:
@@ -112,6 +113,9 @@ class FlowParser:
                 else:
                     resp_content = ""  # Empty response
 
+            # Detect request context
+            context = detect_request_context(flow)
+
             return {
                 "timestamp": getattr(flow.request, 'timestamp_start', 0),
                 "method": getattr(flow.request, 'method', 'UNKNOWN'),
@@ -123,7 +127,9 @@ class FlowParser:
                 "status_code": status_code,
                 "response_headers": response_headers,
                 "response_content": resp_content,
-                "response_size": response_size
+                "response_size": response_size,
+                "context": context.value,
+                "context_type": context.value  # For backward compatibility
             }
 
         except Exception as e:

@@ -1,91 +1,43 @@
 #!/usr/bin/env python3
 """
-api_timeline.py - Chronological API Timeline Visualizer
+api_timeline.py - API Timeline Visualization
 
-Creates beautiful chronological visualizations of API calls, filtering out
-annoying ads and analytics traffic to focus on the actual APIs you care about.
+Generates chronological timeline of API calls with interactive filtering.
+Configurable filtering based on HTTP methods, request types, and noise reduction.
 """
 
 import json
 import time
 import logging
-from collections import defaultdict
-from typing import Dict, List, Any, Set
 from datetime import datetime
 from pathlib import Path
+from collections import defaultdict
+from typing import Dict, List, Any, Set
 from mitmproxy import http, ctx
+import sys
+sys.path.append('.')
+
+from addons.context_detector import detect_request_context, RequestContext, get_context_info
+from config import config
 
 
 class APITimeline:
-    """Generate chronological timelines of API calls."""
+    """
+    Chronological timeline generator for API calls with configurable filtering.
+    """
 
     def __init__(self):
         self.api_calls = []
         self.domains_seen = set()
 
-        # Comprehensive ads/analytics blocklist
-        self.blocked_patterns = {
-            # Analytics & Tracking
-            'google-analytics.com', 'googleanalytics.com', 'google-analytics',
-            'gtag', 'gtm.js', 'ga.js', '_ga', '/analytics/', '/tracking/',
-            'mixpanel.com', 'amplitude.com', 'segment.com', 'segment.io',
-            'hotjar.com', 'fullstory.com', 'logrocket.com', 'datadog',
-            'newrelic.com', 'bugsnag.com', 'sentry.io', 'rollbar.com',
-
-            # Advertising
-            'googlesyndication.com', 'doubleclick.net', 'googleadservices.com',
-            'facebook.com/tr', 'connect.facebook.net', 'facebook.net',
-            'ads.yahoo.com', 'bing.com/ads', 'twitter.com/i/adsct',
-            'linkedin.com/px', 'pinterest.com/ct', 'snapchat.com/px',
-            'tiktok.com/i18n/pixel', 'reddit.com/api/v1/pixel',
-
-            # CDNs for ads/tracking (be more specific)
-            'cdn.segment.com', 'cdn.mxpnl.com', 'static.hotjar.com',
-
-            # Common ad/tracking endpoints
-            '/pixel.gif', '/collect?', '/tr?', '/ads/', '/ad/', '/tracking',
-            '/analytics', '/metrics', '/telemetry', '/beacon', '/ping',
-
-            # Specific tracking services
-            'amplitude.com', 'intercom.io', 'zendesk.com/embeds',
-            'olark.com', 'zopim.com', 'drift.com', 'crisp.chat'
-        }
-
-    def load(self, loader):
-        """Configure addon options."""
-        loader.add_option(
-            "timeline_enabled", bool, True,
-            "Enable API timeline generation"
-        )
-        loader.add_option(
-            "timeline_output_dir", str, "api_timeline",
-            "Directory to save timeline files"
-        )
-        loader.add_option(
-            "timeline_custom_blocks", str, "",
-            "Comma-separated list of additional patterns to block"
-        )
-
-    def configure(self, updated):
-        """Handle configuration updates."""
-        if "timeline_custom_blocks" in updated:
-            custom_blocks = ctx.options.timeline_custom_blocks
-            if custom_blocks:
-                additional_patterns = [p.strip() for p in custom_blocks.split(',')]
-                self.blocked_patterns.update(additional_patterns)
-                logging.info(f"📝 Added {len(additional_patterns)} custom block patterns")
-
     def response(self, flow: http.HTTPFlow):
-        """Process completed API calls for timeline."""
-        if not ctx.options.timeline_enabled:
-            return
-
-        # Skip if this looks like ads/analytics
+        """Process completed requests based on configuration."""
+        # Skip ads/analytics traffic first
         if self._is_blocked_traffic(flow):
             return
 
-        # Skip non-API looking traffic
-        if not self._is_api_traffic(flow):
+        # Apply configurable filtering
+        if not self._should_include_request(flow):
             return
 
         try:
@@ -100,7 +52,7 @@ class APITimeline:
         path = flow.request.path.lower()
 
         # Check against all blocked patterns
-        for pattern in self.blocked_patterns:
+        for pattern in config.blocked_patterns:
             if pattern in url or pattern in host or pattern in path:
                 return True
 
@@ -114,6 +66,63 @@ class APITimeline:
         # Check for typical analytics request patterns
         if any(indicator in path for indicator in ['/collect', '/pixel', '/beacon', '/track']):
             return True
+
+        return False
+
+    def _should_include_request(self, flow: http.HTTPFlow) -> bool:
+        """Determine if request should be included based on configuration."""
+        method = flow.request.method.upper()
+
+        # Check HTTP method filtering
+        if method not in config.http_methods:
+            return False
+
+        # Check context-based filtering
+        context = detect_request_context(flow)
+
+        if context == RequestContext.BROWSER and not config.include_browser_requests:
+            return False
+        elif context == RequestContext.FRONTEND_BACKEND and not config.include_api_requests:
+            return False
+        elif context == RequestContext.UNKNOWN and not config.include_unknown_requests:
+            return False
+
+        # Apply noise filtering based on config
+        if self._is_filtered_noise(flow):
+            return False
+
+        return True
+
+    def _is_filtered_noise(self, flow: http.HTTPFlow) -> bool:
+        """Check if request should be filtered as noise based on config."""
+        method = flow.request.method.upper()
+        path = flow.request.path.lower()
+
+        # Static assets filtering
+        if config.filter_static_assets:
+            static_extensions = ['.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.woff', '.woff2', '.ttf']
+            if any(path.endswith(ext) for ext in static_extensions):
+                return True
+
+        # Browser housekeeping filtering
+        if config.filter_browser_housekeeping:
+            housekeeping_patterns = [
+                '/favicon.ico', '/robots.txt', '/sitemap.xml',
+                '/apple-touch-icon', '/manifest.json', '/.well-known/'
+            ]
+            if any(pattern in path for pattern in housekeeping_patterns):
+                return True
+
+        # Health checks filtering
+        if config.filter_health_checks:
+            health_patterns = ['/ping', '/healthz', '/health', '/status', '/alive', '/ready']
+            if any(pattern in path for pattern in health_patterns):
+                return True
+
+        # Prefetch/preload filtering
+        if config.filter_prefetch_requests:
+            if flow.request.headers.get('purpose') in ['prefetch', 'preload']:
+                return True
 
         return False
 
@@ -165,6 +174,10 @@ class APITimeline:
         if flow.response and hasattr(flow.response, 'timestamp_start'):
             response_time = (flow.response.timestamp_start - timestamp) * 1000  # ms
 
+        # Detect request context
+        context = detect_request_context(flow)
+        context_info = get_context_info(context)
+
         # Extract key information
         call_info = {
             'timestamp': timestamp,
@@ -177,7 +190,11 @@ class APITimeline:
             'response_time_ms': round(response_time, 1),
             'response_size': len(flow.response.content) if flow.response and flow.response.content else 0,
             'content_type': flow.response.headers.get('content-type', '') if flow.response else '',
-            'is_error': flow.response.status_code >= 400 if flow.response else False
+            'is_error': flow.response.status_code >= 400 if flow.response else False,
+            'context': context.value,
+            'context_name': context_info['name'],
+            'context_icon': context_info['icon'],
+            'context_description': context_info['description']
         }
 
         self.api_calls.append(call_info)
@@ -231,67 +248,167 @@ class APITimeline:
             json.dump(timeline_data, f, indent=2)
 
     def _generate_html_timeline(self, output_path: Path):
-        """Generate interactive HTML timeline."""
+        """Generate interactive HTML timeline with configurable filtering."""
+        # Get unique methods and domains from the data
+        unique_methods = sorted(set(call['method'] for call in self.api_calls))
+        unique_domains = sorted(self.domains_seen)
+
+        # Generate method checkboxes based on config
+        method_checkboxes = []
+        for method in unique_methods:
+            checked = "checked" if method in config.http_methods else ""
+            method_checkboxes.append(f'<label><input type="checkbox" value="{method}" {checked} onchange="applyFilters()"> {method}</label>')
+
+        # Generate context checkboxes based on config
+        context_checkboxes = []
+        context_options = [
+            ("browser", "🌐 Browser", config.include_browser_requests),
+            ("api", "⚡ API", config.include_api_requests),
+            ("unknown", "❓ Unknown", config.include_unknown_requests)
+        ]
+        for value, label, enabled in context_options:
+            checked = "checked" if enabled else ""
+            context_checkboxes.append(f'<label><input type="checkbox" value="{value}" {checked} onchange="applyFilters()"> {label}</label>')
+
         html_content = f"""
 <!DOCTYPE html>
 <html>
 <head>
     <title>API Timeline Visualization</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 20px; }}
-        .header {{ background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }}
-        .stats {{ display: flex; gap: 20px; margin-bottom: 20px; }}
-        .stat {{ background: white; padding: 15px; border-radius: 6px; border: 1px solid #e1e5e9; }}
-        .timeline {{ background: white; border-radius: 8px; border: 1px solid #e1e5e9; }}
-        .call {{ padding: 12px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 15px; }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0; padding: 20px; background: #f8f9fa;
+        }}
+        .header {{
+            background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;
+            border: 1px solid #e1e5e9;
+        }}
+        .stats {{
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px; margin-bottom: 20px;
+        }}
+        .stat {{
+            background: white; padding: 15px; border-radius: 6px;
+            border: 1px solid #e1e5e9; text-align: center;
+        }}
+        .filters {{
+            background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;
+            border: 1px solid #e1e5e9;
+        }}
+        .filter-section {{
+            margin-bottom: 15px;
+        }}
+        .filter-section h4 {{
+            margin: 0 0 10px 0; color: #333;
+        }}
+        .checkbox-group {{
+            display: flex; flex-wrap: wrap; gap: 15px;
+        }}
+        .checkbox-group label {{
+            display: flex; align-items: center; gap: 5px; cursor: pointer;
+        }}
+        .timeline {{
+            background: white; border-radius: 8px; border: 1px solid #e1e5e9;
+            max-height: 70vh; overflow-y: auto;
+        }}
+        .call {{
+            padding: 12px 15px; border-bottom: 1px solid #f0f0f0;
+            display: grid; grid-template-columns: 100px 40px 60px 1fr 50px 80px;
+            gap: 15px; align-items: center;
+        }}
         .call:hover {{ background: #f8f9fa; }}
-        .timestamp {{ color: #666; font-size: 14px; width: 100px; }}
-        .method {{ font-weight: bold; width: 60px; }}
+        .call.hidden {{ display: none; }}
+        .timestamp {{ color: #666; font-size: 13px; }}
+        .context {{ text-align: center; font-size: 16px; }}
+        .method {{ font-weight: bold; text-align: center; }}
         .method.GET {{ color: #28a745; }}
         .method.POST {{ color: #007bff; }}
-        .method.PUT {{ color: #ffc107; }}
+        .method.PUT {{ color: #ffc107; color: #000; }}
+        .method.PATCH {{ color: #17a2b8; }}
         .method.DELETE {{ color: #dc3545; }}
-        .url {{ flex: 1; font-family: monospace; font-size: 14px; }}
-        .status {{ width: 40px; text-align: center; }}
+        .url {{
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 13px; overflow: hidden; text-overflow: ellipsis;
+        }}
+        .status {{ text-align: center; font-weight: bold; }}
         .status.ok {{ color: #28a745; }}
-        .status.error {{ color: #dc3545; font-weight: bold; }}
-        .response-time {{ color: #666; width: 80px; }}
+        .status.error {{ color: #dc3545; }}
+        .response-time {{ color: #666; text-align: right; }}
         .slow {{ color: #ffc107; font-weight: bold; }}
-        .domain-filter {{ margin-bottom: 15px; }}
-        .domain-filter select {{ padding: 8px; border-radius: 4px; border: 1px solid #ccc; }}
+        .filter-summary {{
+            background: #e3f2fd; padding: 10px; border-radius: 4px;
+            margin-top: 15px; font-size: 14px;
+        }}
+        .reset-filters {{
+            background: #dc3545; color: white; border: none; padding: 8px 15px;
+            border-radius: 4px; cursor: pointer; margin-left: 15px;
+        }}
+        .reset-filters:hover {{ background: #c82333; }}
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🕒 API Timeline Visualization</h1>
-        <p>Chronological view of {len(self.api_calls)} API calls across {len(self.domains_seen)} domains</p>
+        <p>Chronological view of <span id="total-calls">{len(self.api_calls)}</span> requests across {len(self.domains_seen)} domains</p>
     </div>
 
     <div class="stats">
         <div class="stat">
             <strong>{len(self.api_calls)}</strong><br>
-            Total API Calls
+            <small>Total Requests</small>
         </div>
         <div class="stat">
             <strong>{len(self.domains_seen)}</strong><br>
-            Unique Domains
+            <small>Unique Domains</small>
         </div>
         <div class="stat">
             <strong>{len([c for c in self.api_calls if c['is_error']])}</strong><br>
-            Error Responses
+            <small>Error Responses</small>
         </div>
         <div class="stat">
-            <strong>{round(sum(c['response_time_ms'] for c in self.api_calls) / len(self.api_calls), 1)}ms</strong><br>
-            Avg Response Time
+            <strong>{round(sum(c['response_time_ms'] for c in self.api_calls) / len(self.api_calls), 1) if self.api_calls else 0}ms</strong><br>
+            <small>Avg Response Time</small>
+        </div>
+        <div class="stat">
+            <strong>{len([c for c in self.api_calls if c.get('context') == 'browser'])}</strong><br>
+            <small>🌐 Browser</small>
+        </div>
+        <div class="stat">
+            <strong>{len([c for c in self.api_calls if c.get('context') == 'api'])}</strong><br>
+            <small>⚡ API</small>
         </div>
     </div>
 
-    <div class="domain-filter">
-        <label>Filter by domain: </label>
-        <select id="domainFilter" onchange="filterByDomain()">
-            <option value="">All domains</option>
-            {''.join(f'<option value="{domain}">{domain}</option>' for domain in sorted(self.domains_seen))}
-        </select>
+    <div class="filters">
+        <div class="filter-section">
+            <h4>🔧 HTTP Methods</h4>
+            <div class="checkbox-group" id="method-filters">
+                {' '.join(method_checkboxes)}
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>🎯 Request Context</h4>
+            <div class="checkbox-group" id="context-filters">
+                {' '.join(context_checkboxes)}
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h4>🌐 Domain Filter</h4>
+            <select id="domain-filter" onchange="applyFilters()" style="padding: 8px; border-radius: 4px;">
+                <option value="">All domains ({len(unique_domains)})</option>
+                {''.join(f'<option value="{domain}">{domain}</option>' for domain in unique_domains)}
+            </select>
+            <button class="reset-filters" onclick="resetFilters()">Reset All Filters</button>
+        </div>
+
+        <div class="filter-summary" id="filter-summary">
+            Showing <span id="visible-count">{len(self.api_calls)}</span> of {len(self.api_calls)} requests
+        </div>
     </div>
 
     <div class="timeline" id="timeline">
@@ -299,22 +416,87 @@ class APITimeline:
     </div>
 
     <script>
-        function filterByDomain() {{
-            const filter = document.getElementById('domainFilter').value;
+        let allCalls = {json.dumps(self.api_calls)};
+
+        function applyFilters() {{
+            // Get selected methods
+            const methodCheckboxes = document.querySelectorAll('#method-filters input[type="checkbox"]');
+            const selectedMethods = Array.from(methodCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            // Get selected contexts
+            const contextCheckboxes = document.querySelectorAll('#context-filters input[type="checkbox"]');
+            const selectedContexts = Array.from(contextCheckboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            // Get selected domain
+            const domainFilter = document.getElementById('domain-filter').value;
+
+            // Apply filters to all calls
             const calls = document.querySelectorAll('.call');
-            calls.forEach(call => {{
-                const url = call.querySelector('.url').textContent;
-                if (!filter || url.includes(filter)) {{
-                    call.style.display = 'flex';
+            let visibleCount = 0;
+
+            calls.forEach((call, index) => {{
+                const callData = allCalls[index];
+                let show = true;
+
+                // Method filter
+                if (selectedMethods.length > 0 && !selectedMethods.includes(callData.method)) {{
+                    show = false;
+                }}
+
+                // Context filter
+                if (selectedContexts.length > 0 && !selectedContexts.includes(callData.context || 'unknown')) {{
+                    show = false;
+                }}
+
+                // Domain filter
+                if (domainFilter && !callData.url.includes(domainFilter)) {{
+                    show = false;
+                }}
+
+                if (show) {{
+                    call.classList.remove('hidden');
+                    visibleCount++;
                 }} else {{
-                    call.style.display = 'none';
+                    call.classList.add('hidden');
                 }}
             }});
+
+            // Update summary
+            document.getElementById('visible-count').textContent = visibleCount;
         }}
+
+        function resetFilters() {{
+            // Reset all checkboxes to config defaults
+            const methodCheckboxes = document.querySelectorAll('#method-filters input[type="checkbox"]');
+            const configMethods = {json.dumps(config.http_methods)};
+            methodCheckboxes.forEach(cb => {{
+                cb.checked = configMethods.includes(cb.value);
+            }});
+
+            // Reset context checkboxes to config defaults
+            document.querySelector('#context-filters input[value="browser"]').checked = {json.dumps(config.include_browser_requests)};
+            document.querySelector('#context-filters input[value="api"]').checked = {json.dumps(config.include_api_requests)};
+            document.querySelector('#context-filters input[value="unknown"]').checked = {json.dumps(config.include_unknown_requests)};
+
+            // Reset domain filter
+            document.getElementById('domain-filter').value = '';
+
+            // Apply filters
+            applyFilters();
+        }}
+
+        // Apply initial filters based on config
+        document.addEventListener('DOMContentLoaded', function() {{
+            applyFilters();
+        }});
     </script>
 </body>
 </html>
-"""
+        """
 
         with open(output_path / 'timeline.html', 'w') as f:
             f.write(html_content)
@@ -325,9 +507,14 @@ class APITimeline:
         status_class = 'error' if call['is_error'] else 'ok'
         time_class = 'slow' if call['response_time_ms'] > 1000 else ''
 
+        context = call.get('context', 'unknown')
+        context_icon = call.get('context_icon', '❓')
+        context_class = f'context {context}'
+
         return f"""
-        <div class="call">
+        <div class="call" data-context="{context}" data-method="{call['method']}" title="{call.get('context_description', '')}">
             <div class="timestamp">{time_str}</div>
+            <div class="{context_class}">{context_icon}</div>
             <div class="method {call['method']}">{call['method']}</div>
             <div class="url">{call['url']}</div>
             <div class="status {status_class}">{call['status_code'] or '?'}</div>
@@ -350,8 +537,10 @@ class APITimeline:
 
         # Domain statistics
         domain_counts = defaultdict(int)
+        context_counts = defaultdict(int)
         for call in self.api_calls:
             domain_counts[call['host']] += 1
+            context_counts[call.get('context', 'unknown')] += 1
 
         md_content.extend([
             "### Top Domains:",
@@ -360,6 +549,17 @@ class APITimeline:
 
         for domain, count in sorted(domain_counts.items(), key=lambda x: x[1], reverse=True)[:10]:
             md_content.append(f"- **{domain}**: {count} calls")
+
+        # Context statistics
+        md_content.extend([
+            "",
+            "### Request Context:",
+            ""
+        ])
+
+        for context, count in sorted(context_counts.items()):
+            icon = "🌐" if context == "browser" else "⚡" if context == "api" else "❓"
+            md_content.append(f"- **{icon} {context.title()}**: {count} calls")
 
         # Method statistics
         method_counts = defaultdict(int)
@@ -393,14 +593,15 @@ class APITimeline:
             "",
             "## 🕒 Recent API Calls (Latest 20)",
             "",
-            "| Time | Method | URL | Status | Response Time |",
-            "|------|--------|-----|--------|---------------|"
+            "| Time | Context | Method | URL | Status | Response Time |",
+            "|------|---------|--------|-----|--------|---------------|"
         ])
 
         for call in self.api_calls[-20:]:
             time_str = datetime.fromisoformat(call['datetime']).strftime('%H:%M:%S')
             status = call['status_code'] or '?'
-            md_content.append(f"| {time_str} | {call['method']} | `{call['path']}` | {status} | {call['response_time_ms']}ms |")
+            context_icon = call.get('context_icon', '❓')
+            md_content.append(f"| {time_str} | {context_icon} | {call['method']} | `{call['path']}` | {status} | {call['response_time_ms']}ms |")
 
         with open(output_path / 'timeline.md', 'w') as f:
             f.write('\n'.join(md_content))
@@ -412,7 +613,8 @@ class APITimeline:
         with open(output_path / 'timeline.csv', 'w', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=[
                 'timestamp', 'datetime', 'method', 'host', 'path', 'url',
-                'status_code', 'response_time_ms', 'response_size', 'content_type', 'is_error'
+                'status_code', 'response_time_ms', 'response_size', 'content_type', 'is_error',
+                'context', 'context_name', 'context_icon', 'context_description'
             ])
             writer.writeheader()
             writer.writerows(self.api_calls)

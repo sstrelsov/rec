@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-api_extractor.py - Advanced API Documentation Generator
+api_extractor.py - API Documentation Generator
 
 Automatically extracts and documents API schemas, parameters, and responses
 to create comprehensive API documentation from captured traffic.
 
-Filters out annoying ads/analytics traffic.
+Uses configurable filtering to focus on relevant APIs.
 """
 
 import json
@@ -15,6 +15,11 @@ from collections import defaultdict
 from typing import Dict, List, Any, Set, Optional
 from urllib.parse import urlparse, parse_qs
 from mitmproxy import http, ctx
+import sys
+sys.path.append('.')
+from addons.context_detector import detect_request_context, RequestContext, get_context_info
+from config import config
+import time
 
 
 class APIExtractor:
@@ -30,24 +35,17 @@ class APIExtractor:
                     'response_schemas': defaultdict(int),  # Schema -> count
                     'status_codes': defaultdict(int),
                     'response_examples': {},
-                    'content_types': {'request': set(), 'response': set()}
+                    'content_types': {'request': set(), 'response': set()},
+                    'contexts': defaultdict(int)  # Track request contexts
                 })
             }),
             'base_url': '',
-            'total_calls': 0
+            'total_calls': 0,
+            'context_stats': defaultdict(int)
         })
 
         # Ads/Analytics blocklist
-        self.blocked_patterns = {
-            'google-analytics.com', 'googleanalytics.com', 'google-analytics',
-            'gtag', 'gtm.js', 'ga.js', '_ga', '/analytics/', '/tracking/',
-            'mixpanel.com', 'amplitude.com', 'segment.com', 'segment.io',
-            'hotjar.com', 'fullstory.com', 'logrocket.com', 'datadog',
-            'googlesyndication.com', 'doubleclick.net', 'googleadservices.com',
-            'facebook.com/tr', 'connect.facebook.net', 'facebook.net',
-            '/pixel.gif', '/collect?', '/tr?', '/ads/', '/ad/', '/tracking',
-            '/analytics', '/metrics', '/telemetry', '/beacon', '/ping'
-        }
+
 
         # Schema detection patterns
         self.common_id_patterns = [
@@ -74,11 +72,15 @@ class APIExtractor:
 
     def response(self, flow: http.HTTPFlow):
         """Process completed API calls."""
-        if not self._get_options_value("api_extractor_enabled", True):
+        if not config.api_extractor_enabled:
             return
 
         # Skip ads/analytics traffic first
         if self._is_blocked_traffic(flow):
+            return
+
+        # Apply configurable noise filtering
+        if self._is_filtered_noise(flow):
             return
 
         # Skip non-API traffic (basic heuristics)
@@ -97,7 +99,7 @@ class APIExtractor:
         path = flow.request.path.lower()
 
         # Check against blocked patterns
-        for pattern in self.blocked_patterns:
+        for pattern in config.blocked_patterns:
             if pattern in url or pattern in host or pattern in path:
                 return True
 
@@ -109,20 +111,35 @@ class APIExtractor:
 
         return False
 
-    def _get_options_value(self, option_name: str, default_value):
-        """Get option value with fallback for offline mode."""
-        try:
-            from mitmproxy import ctx
-            if hasattr(ctx, 'options') and hasattr(ctx.options, option_name):
-                return getattr(ctx.options, option_name)
-        except:
-            pass
+    def _is_filtered_noise(self, flow: http.HTTPFlow) -> bool:
+        """Check if request should be filtered as noise based on config."""
+        method = flow.request.method.upper()
+        path = flow.request.path.lower()
 
-        # Always use 1 for min calls - we want to capture everything
-        if option_name == "extractor_min_calls":
-            return 1
+        # Check HTTP method filtering (but be more permissive for APIs)
+        # APIs might use OPTIONS for CORS, so only filter if specifically configured
+        if method == 'OPTIONS' and config.filter_prefetch_requests:
+            return True
 
-        return default_value
+        if method == 'HEAD' and config.filter_health_checks:
+            return True
+
+        # Browser housekeeping filtering
+        if config.filter_browser_housekeeping:
+            housekeeping_patterns = [
+                '/favicon.ico', '/robots.txt', '/sitemap.xml',
+                '/apple-touch-icon', '/manifest.json', '/.well-known/'
+            ]
+            if any(pattern in path for pattern in housekeeping_patterns):
+                return True
+
+        # Health checks filtering
+        if config.filter_health_checks:
+            health_patterns = ['/ping', '/healthz', '/health', '/status', '/alive', '/ready']
+            if any(pattern in path for pattern in health_patterns):
+                return True
+
+        return False
 
     def _is_api_request(self, flow: http.HTTPFlow) -> bool:
         """Determine if this is an API request worth documenting."""
@@ -175,6 +192,11 @@ class APIExtractor:
         endpoint = api['endpoints'][normalized_path]
         method_data = endpoint['methods'][flow.request.method]
         method_data['count'] += 1
+
+        # Track request context
+        context = detect_request_context(flow)
+        method_data['contexts'][context.value] += 1
+        api['context_stats'][context.value] += 1
 
         # Extract parameters
         self._extract_parameters(flow, method_data, query_params, normalized_path, path)
@@ -259,21 +281,24 @@ class APIExtractor:
         content_type = flow.request.headers.get('content-type', '').lower()
         method_data['content_types']['request'].add(content_type)
 
-        # Store request examples (limited)
-        if len(method_data['request_examples']) < self._get_options_value("extractor_example_limit", 3):
+        # Store request example if we have room
+        if len(method_data['request_examples']) < config.max_examples_per_endpoint:
             example = {
                 'headers': dict(flow.request.headers),
-                'content_type': content_type
+                'timestamp': getattr(flow.request, 'timestamp_start', time.time())
             }
 
-            # Add body if present and JSON
-            if flow.request.content and 'json' in content_type:
+            # Add request body if present
+            if flow.request.content:
                 try:
                     body_text = flow.request.get_text()
                     if body_text:
-                        example['body'] = json.loads(body_text)
+                        if content_type and 'json' in content_type:
+                            example['body'] = json.loads(body_text)
+                        else:
+                            example['body'] = body_text
                 except:
-                    example['body'] = '<non-json data>'
+                    pass
 
             method_data['request_examples'].append(example)
 
@@ -356,7 +381,7 @@ class APIExtractor:
 
         # Generate documentation for each domain
         for domain, api_data in self.api_catalog.items():
-            if api_data['total_calls'] < self._get_options_value("extractor_min_calls", 2):
+            if api_data['total_calls'] < config.min_calls_per_endpoint:
                 continue
 
             domain_dir = output_path / self._sanitize_filename(domain)
@@ -377,7 +402,7 @@ class APIExtractor:
                 'title': openapi_spec['info']['title'],
                 'total_calls': api_data['total_calls'],
                 'endpoint_count': len([ep for ep in api_data['endpoints'].values()
-                                     if any(m['count'] >= self._get_options_value("extractor_min_calls", 2)
+                                     if any(m['count'] >= config.min_calls_per_endpoint
                                            for m in ep['methods'].values())])
             })
 
@@ -391,7 +416,7 @@ class APIExtractor:
     def _generate_openapi_spec(self, domain: str) -> Dict[str, Any]:
         """Generate OpenAPI 3.0 specification from captured APIs."""
         api_data = self.api_catalog[domain]
-        min_calls = self._get_options_value("extractor_min_calls", 2)
+        min_calls = config.min_calls_per_endpoint
 
         spec = {
             "openapi": "3.0.0",
@@ -477,12 +502,23 @@ class APIExtractor:
 
     def _generate_summary_report(self, domain: str, api_data: Dict, output_dir):
         """Generate human-readable summary report."""
+        # Calculate context statistics
+        context_stats = api_data.get('context_stats', {})
+        context_summary = []
+        for context, count in sorted(context_stats.items()):
+            icon = "🌐" if context == "browser" else "⚡" if context == "api" else "❓"
+            context_summary.append(f"**{icon} {context.title()}:** {count} calls")
+
         report = [
             f"# API Documentation: {domain}",
             f"",
             f"**Base URL:** {api_data['base_url']}",
             f"**Total API Calls:** {api_data['total_calls']}",
             f"**Endpoints Discovered:** {len(api_data['endpoints'])}",
+            f"",
+            f"## Request Context Distribution",
+            f"",
+            *context_summary,
             f"",
             f"## Endpoints",
             f""
@@ -501,13 +537,21 @@ class APIExtractor:
             ])
 
             for method, method_data in endpoint_data['methods'].items():
-                if method_data['count'] < self._get_options_value("extractor_min_calls", 2):
+                if method_data['count'] < config.min_calls_per_endpoint:
                     continue
+
+                # Context breakdown for this method
+                contexts = method_data.get('contexts', {})
+                context_breakdown = []
+                for context, count in sorted(contexts.items()):
+                    icon = "🌐" if context == "browser" else "⚡" if context == "api" else "❓"
+                    context_breakdown.append(f"{icon} {context.title()}: {count}")
 
                 report.extend([
                     f"#### {method} {path}",
                     f"",
                     f"**Calls:** {method_data['count']}",
+                    f"**Context:** {', '.join(context_breakdown) if context_breakdown else 'N/A'}",
                     f"**Status Codes:** {dict(method_data['status_codes'])}",
                     f""
                 ])
