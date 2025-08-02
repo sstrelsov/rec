@@ -39,6 +39,7 @@ capture.log
 # mitmproxy configuration and certificates
 .mitmproxy/
 mitmproxy-ca-cert.pem
+output/
 
 # ========================================
 # PYTHON
@@ -268,3 +269,5 @@ credentials.json
 # - Personal information
 # - Real domain names or URLs
 # - Actual response data
+# User configuration
+.env

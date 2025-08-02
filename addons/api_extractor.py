@@ -347,6 +347,8 @@ class APIExtractor:
         output_path = Path(output_dir)
         output_path.mkdir(exist_ok=True)
 
+        domains_with_docs = []
+
         # Generate documentation for each domain
         for domain, api_data in self.api_catalog.items():
             if api_data['total_calls'] < self._get_options_value("extractor_min_calls", 2):
@@ -365,7 +367,21 @@ class APIExtractor:
             # Generate summary report
             self._generate_summary_report(domain, api_data, domain_dir)
 
+            domains_with_docs.append({
+                'domain': domain,
+                'title': openapi_spec['info']['title'],
+                'total_calls': api_data['total_calls'],
+                'endpoint_count': len([ep for ep in api_data['endpoints'].values()
+                                     if any(m['count'] >= self._get_options_value("extractor_min_calls", 2)
+                                           for m in ep['methods'].values())])
+            })
+
             logging.info(f"📚 Generated API documentation for {domain} in {domain_dir}")
+
+        # Generate interactive viewer
+        if domains_with_docs:
+            self._generate_viewer_html(output_path, domains_with_docs)
+            logging.info(f"🚀 Generated interactive viewer: {output_path}/viewer.html")
 
     def _generate_openapi_spec(self, domain: str) -> Dict[str, Any]:
         """Generate OpenAPI 3.0 specification from captured APIs."""
@@ -511,6 +527,130 @@ class APIExtractor:
     def _sanitize_filename(self, name: str) -> str:
         """Sanitize name for filesystem use."""
         return re.sub(r'[^\w\-.]', '_', name)
+
+    def _generate_viewer_html(self, output_path, domains_with_docs):
+        """Generate interactive HTML viewer for all API documentation."""
+
+        viewer_html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation Viewer</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.0/swagger-ui.css" />
+    <style>
+        body {{
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }}
+        .header {{
+            background: #1f2937;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+        .header h1 {{
+            margin: 0;
+            font-size: 1.5rem;
+        }}
+        .api-selector {{
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            min-width: 200px;
+        }}
+        .stats {{
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }}
+        .swagger-container {{
+            height: calc(100vh - 80px);
+        }}
+        .loading {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50vh;
+            font-size: 1.125rem;
+            color: #6b7280;
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>🚀 API Documentation</h1>
+            <div class="stats">{len(domains_with_docs)} APIs • {sum(d['total_calls'] for d in domains_with_docs)} total calls</div>
+        </div>
+        <select class="api-selector" id="apiSelector" onchange="loadAPI()">
+            <option value="">Select an API to view...</option>
+            {chr(10).join(f'<option value="{d["domain"]}">{d["title"]} ({d["total_calls"]} calls)</option>' for d in domains_with_docs)}
+        </select>
+    </div>
+
+    <div id="swagger-ui" class="swagger-container">
+        <div class="loading">
+            📚 Select an API from the dropdown above to view its documentation
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.0.0/swagger-ui-bundle.js"></script>
+
+    <script>
+        let ui;
+
+        function loadAPI() {{
+            const selector = document.getElementById('apiSelector');
+            const selectedDomain = selector.value;
+
+            if (!selectedDomain) {{
+                document.getElementById('swagger-ui').innerHTML =
+                    '<div class="loading">📚 Select an API from the dropdown above to view its documentation</div>';
+                return;
+            }}
+
+            // Sanitize domain name for file path (same logic as _sanitize_filename)
+            const sanitizedDomain = selectedDomain.replace(/[^\\w\\-_.]/g, '_');
+            const specUrl = `./${{sanitizedDomain}}/openapi.json`;
+
+            if (ui) {{
+                ui.specActions.updateSpec('');
+            }}
+
+                                    ui = SwaggerUIBundle({{
+                url: specUrl,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIBundle.presets.standalone
+                ],
+                onComplete: function() {{
+                    console.log('API documentation loaded for:', selectedDomain);
+                }},
+                onFailure: function(err) {{
+                    console.error('Failed to load API spec:', err);
+                    document.getElementById('swagger-ui').innerHTML =
+                        '<div class="loading">❌ Failed to load API documentation for ' + selectedDomain + '</div>';
+                }}
+            }});
+        }}
+
+        // Auto-load first API if there's only one
+        if (document.querySelectorAll('#apiSelector option').length === 2) {{
+            document.getElementById('apiSelector').selectedIndex = 1;
+            loadAPI();
+        }}
+    </script>
+</body>
+</html>'''
+
+        with open(output_path / "viewer.html", 'w') as f:
+            f.write(viewer_html)
 
 
 # Register the addon

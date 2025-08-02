@@ -1,13 +1,14 @@
 # MITMPROXY CAPTURE TOOL - Simplified & Elegant
 # Quick workflow: make run → browse normally → make stop → make view
 
-# Configuration
-OUTPUT_DIR := output
+# Configuration - Load from config file
+PYTHON := $(shell if [ -f venv/bin/python ]; then echo "venv/bin/python"; else echo "python3"; fi)
+OUTPUT_DIR := $(shell $(PYTHON) -c "from config import config; print(config.output_dir)")
+VIEWER_PORT := $(shell $(PYTHON) -c "from config import config; print(config.viewer_port)")
 CAPTURE_FILE := $(OUTPUT_DIR)/capture_$(shell date +%Y%m%d_%H%M%S).mitm
 LAST_CAPTURE := $(OUTPUT_DIR)/.last_capture
 API_DIR := $(OUTPUT_DIR)/api_calls_$(shell date +%Y%m%d_%H%M%S)
 PID_FILE := $(OUTPUT_DIR)/.mitmtool.pid
-PYTHON := python3
 
 # Colors
 GREEN := \033[0;32m
@@ -16,7 +17,7 @@ RED := \033[0;31m
 BLUE := \033[0;34m
 NC := \033[0m
 
-.PHONY: help run stop status view clean basic timeline docs viewer open-timeline
+.PHONY: help run stop status view clean basic timeline docs viewer open-timeline config
 
 # Default target - show elegant help
 help:
@@ -35,12 +36,21 @@ help:
 	@echo "  $(YELLOW)make basic$(NC)    → Run in basic mode (no enhancements)"
 	@echo ""
 	@echo "$(GREEN)Other commands:$(NC)"
+	@echo "  $(YELLOW)make config$(NC)   → Show current configuration"
 	@echo "  $(YELLOW)make status$(NC)   → Check current status"
 	@echo "  $(YELLOW)make clean$(NC)    → Remove all files"
 	@echo ""
 	@echo "$(BLUE)💡 Quick start: Run '$(YELLOW)make run$(NC)$(BLUE)', browse normally, then '$(YELLOW)make stop$(NC)$(BLUE)'$(NC)"
 	@echo "$(BLUE)🚀 NEW: Enhanced mode includes API docs + timeline + ads blocking!$(NC)"
 	@echo "$(BLUE)📚 Full documentation: $(YELLOW)cat addons.md$(NC)"
+
+# Show current configuration
+config:
+	@echo "$(BLUE)⚙️  Current Configuration:$(NC)"
+	@echo "  $(YELLOW)Output Directory:$(NC) $(OUTPUT_DIR)"
+	@echo "  $(YELLOW)Viewer Port:$(NC) $(VIEWER_PORT)"
+	@echo ""
+	@echo "$(BLUE)💡 Edit .env file to change settings$(NC)"
 
 # Main command - start everything at once
 run:
@@ -95,9 +105,18 @@ stop:
 			echo "$(YELLOW)🗂️  Organizing APIs...$(NC)"; \
 			$(PYTHON) mitmtool.py organize --input "$$CAPTURE" --output $(API_DIR); \
 			if [ $$? -eq 0 ]; then \
-				echo "$(GREEN)✅ Session complete! APIs organized in: $(API_DIR)$(NC)"; \
+				echo "$(GREEN)✅ APIs organized in: $(API_DIR)$(NC)"; \
 				echo "$(API_DIR)" > $(OUTPUT_DIR)/.last_organized; \
-				echo "$(BLUE)💡 Run 'make view' to browse results$(NC)"; \
+				echo "$(YELLOW)📚 Generating enhanced reports...$(NC)"; \
+				$(PYTHON) generate_reports.py "$$CAPTURE" "$(OUTPUT_DIR)"; \
+				if [ $$? -eq 0 ]; then \
+					echo "$(GREEN)🎉 Session complete! All reports generated$(NC)"; \
+					echo "$(BLUE)🚀 API Docs: $(OUTPUT_DIR)/api_docs/viewer.html$(NC)"; \
+					echo "$(BLUE)🕒 Timeline: $(OUTPUT_DIR)/api_timeline/timeline.html$(NC)"; \
+					echo "$(BLUE)💡 Run 'make viewer' to open interactive docs$(NC)"; \
+				else \
+					echo "$(YELLOW)⚠️  Enhanced reports failed, but APIs are organized$(NC)"; \
+				fi; \
 			else \
 				echo "$(RED)❌ Failed to organize APIs$(NC)"; \
 			fi; \
@@ -212,7 +231,7 @@ viewer:
 		echo "$(BLUE)🚀 Starting API documentation server...$(NC)"; \
 		echo "$(GREEN)💡 This will open your browser automatically$(NC)"; \
 		echo "$(GREEN)📚 Press Ctrl+C to stop the server when done$(NC)"; \
-		$(PYTHON) serve_docs.py $(OUTPUT_DIR)/api_docs; \
+		$(PYTHON) serve_docs.py $(OUTPUT_DIR)/api_docs -p $(VIEWER_PORT); \
 	else \
 		echo "$(YELLOW)⚠️  No API docs found. Run 'make run' then 'make stop' first.$(NC)"; \
 	fi

@@ -42,6 +42,7 @@ make run
 | `make viewer` | 🚀 Interactive API documentation (Swagger UI) |
 | `make open-timeline` | 🕒 Chronological timeline of API calls |
 | `make view` | 📁 Browse organized results (original) |
+| `make config` | ⚙️ Show current configuration |
 | `make status` | Check current status |
 | `make basic` | 🔧 Run in basic mode (no enhancements) |
 | `make clean` | Remove all files |
@@ -108,10 +109,25 @@ python mitmtool.py organize --input custom.mitm --output my_apis
 python mitmtool.py view --domain api.openai.com
 ```
 
+## ⚙️ Configuration
+
+Configure basic settings by editing `.env` file:
+
+```bash
+# Output directory for all generated files
+OUTPUT_DIR=output
+
+# Port for the API documentation viewer server
+VIEWER_PORT=8000
+```
+
+Check current settings: `make config`
+
 ## 🔧 Architecture
 
 ```
 mitmtool.py        # Main CLI entry point
+├── config.py        # Configuration loader (.env file)
 ├── proxy_manager.py # macOS proxy control
 ├── capture.py       # Traffic capture, viewing & organization
 ├── parser.py        # Flow parsing & analysis
