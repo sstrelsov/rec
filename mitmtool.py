@@ -47,11 +47,6 @@ class MitmTool:
             dump_file = self.default_dump_file
         self.traffic_capture.view_capture(dump_file, filter_domain)
 
-    def organize_apis(self, dump_file: str = None, output_dir: str = None) -> bool:
-        """Organize API calls from dump file."""
-        if dump_file is None:
-            dump_file = self.default_dump_file
-        return self.traffic_capture.organize_apis(dump_file, output_dir)
 
     def run_session(self, output_file: str = None) -> bool:
         """Start complete capture session (enable proxy + start capture)."""
@@ -101,12 +96,10 @@ Examples:
   python mitmtool.py stop                      # Stop capture & disable proxy
   python mitmtool.py status                    # Check current status
   python mitmtool.py view --input api.mitm     # View specific capture
-  python mitmtool.py organize --input api.mitm # Organize specific capture
-
 Recommended workflow:
-  make run     # Even simpler - handles everything
-  make stop    # Stop and organize automatically
-  make view    # Browse organized results
+  make run     # Start capturing with automatic organization
+  make stop    # Stop capture
+  make view    # Browse results
         """
     )
 
@@ -134,12 +127,6 @@ Recommended workflow:
     view_parser.add_argument('--domain', '-d', default=None,
                             help='Filter by domain name')
 
-    # Organize command
-    organize_parser = subparsers.add_parser('organize', help='Organize API calls into directory structure')
-    organize_parser.add_argument('--input', '-i', default=None,
-                                help='Input dump file (default: capture.mitm)')
-    organize_parser.add_argument('--output', '-o', default=None,
-                                help='Output directory (default: api_calls)')
 
     return parser
 
@@ -152,14 +139,14 @@ def main():
     if not args.command:
         print("🕵️  mitmtool - Elegant Network Traffic Capture\n")
         print("💡 Quick start:")
-        print("   python mitmtool.py run      # Start capturing")
-        print("   python mitmtool.py stop     # Stop & organize")
+        print("   python mitmtool.py run      # Start capturing (auto-organizes)")
+        print("   python mitmtool.py stop     # Stop capture")
         print("   python mitmtool.py view     # Browse results")
         print("\n📖 For full help:")
         print("   python mitmtool.py --help")
         print("\n🚀 Even simpler:")
         print("   make run     # Start everything")
-        print("   make stop    # Stop & organize")
+        print("   make stop    # Stop capture")
         print("   make view    # Browse results")
         return
 
@@ -186,10 +173,6 @@ def main():
 
         elif args.command == 'view':
             tool.view_capture(args.input, args.domain)
-
-        elif args.command == 'organize':
-            success = tool.organize_apis(args.input, args.output)
-            sys.exit(0 if success else 1)
 
         else:
             parser.print_help()

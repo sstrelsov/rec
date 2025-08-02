@@ -456,6 +456,22 @@ class APIExtractor:
                 "description": "API documentation generated from captured traffic"
             },
             "servers": [{"url": api_data['base_url']}] if api_data['base_url'] else [],
+            "components": {
+                "securitySchemes": {
+                    "bearerAuth": {
+                        "type": "http",
+                        "scheme": "bearer",
+                        "bearerFormat": "JWT",
+                        "description": "Bearer token authentication"
+                    },
+                    "apiKeyAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-API-Key",
+                        "description": "API key authentication"
+                    }
+                }
+            },
             "paths": {}
         }
 
@@ -477,6 +493,15 @@ class APIExtractor:
 
                 # Add parameters
                 params = method_data['parameters']
+
+                # Add security requirements if auth is detected
+                auth_headers = params.get('headers', set())
+                if any(header in auth_headers for header in ['authorization', 'x-api-key', 'x-auth-token']):
+                    method_spec["security"] = []
+                    if 'authorization' in auth_headers:
+                        method_spec["security"].append({"bearerAuth": []})
+                    if any(header in auth_headers for header in ['x-api-key', 'x-auth-token']):
+                        method_spec["security"].append({"apiKeyAuth": []})
 
                 # Query parameters
                 for param in params['query']:
@@ -542,6 +567,22 @@ class APIExtractor:
                 "description": f"Combined API documentation for {root_domain} and subdomains"
             },
             "servers": [],
+            "components": {
+                "securitySchemes": {
+                    "bearerAuth": {
+                        "type": "http",
+                        "scheme": "bearer",
+                        "bearerFormat": "JWT",
+                        "description": "Bearer token authentication"
+                    },
+                    "apiKeyAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-API-Key",
+                        "description": "API key authentication"
+                    }
+                }
+            },
             "paths": {}
         }
 
@@ -582,6 +623,15 @@ class APIExtractor:
                     # Add server selection if multiple servers
                     if len(spec["servers"]) > 1:
                         method_spec["servers"] = [{"url": api_data['base_url']}]
+
+                    # Add security requirements if auth is detected
+                    auth_headers = method_data['parameters'].get('headers', set())
+                    if any(header in auth_headers for header in ['authorization', 'x-api-key', 'x-auth-token']):
+                        method_spec["security"] = []
+                        if 'authorization' in auth_headers:
+                            method_spec["security"].append({"bearerAuth": []})
+                        if any(header in auth_headers for header in ['x-api-key', 'x-auth-token']):
+                            method_spec["security"].append({"apiKeyAuth": []})
 
                     # Add parameters
                     params = method_data['parameters']

@@ -7,7 +7,6 @@ OUTPUT_DIR := $(shell $(PYTHON) -c "from config import config; print(config.outp
 VIEWER_PORT := $(shell $(PYTHON) -c "from config import config; print(config.viewer_port)")
 CAPTURE_FILE := $(OUTPUT_DIR)/capture_$(shell date +%Y%m%d_%H%M%S).mitm
 LAST_CAPTURE := $(OUTPUT_DIR)/.last_capture
-API_DIR := $(OUTPUT_DIR)/api_calls_$(shell date +%Y%m%d_%H%M%S)
 PID_FILE := $(OUTPUT_DIR)/.mitmtool.pid
 
 # Colors
@@ -17,7 +16,7 @@ RED := \033[0;31m
 BLUE := \033[0;34m
 NC := \033[0m
 
-.PHONY: help run stop status view clean basic timeline docs viewer open-timeline config
+.PHONY: help run stop status view clean basic timeline docs viewer open-timeline config request
 
 # Default target - show elegant help
 help:
@@ -25,7 +24,7 @@ help:
 	@echo ""
 	@echo "$(GREEN)Simple workflow:$(NC)"
 	@echo "  $(YELLOW)make run$(NC)      → Start proxy & capture everything"
-	@echo "  $(YELLOW)make stop$(NC)     → Stop capture & organize APIs"
+	@echo "  $(YELLOW)make stop$(NC)     → Stop capture (auto-organizes)"
 	@echo "  $(YELLOW)make view$(NC)     → Browse organized results"
 	@echo ""
 	@echo "$(GREEN)✨ Enhanced features (NEW!):$(NC)"
@@ -36,6 +35,7 @@ help:
 	@echo "  $(YELLOW)make basic$(NC)    → Run in basic mode (no enhancements)"
 	@echo ""
 	@echo "$(GREEN)Other commands:$(NC)"
+	@echo "  $(YELLOW)make request <dir>$(NC) → Test API call from specific directory"
 	@echo "  $(YELLOW)make config$(NC)   → Show current configuration"
 	@echo "  $(YELLOW)make status$(NC)   → Check current status"
 	@echo "  $(YELLOW)make clean$(NC)    → Remove all files"
@@ -102,23 +102,16 @@ stop:
 	@if [ -f $(LAST_CAPTURE) ]; then \
 		CAPTURE=$$(cat $(LAST_CAPTURE)); \
 		if [ -f "$$CAPTURE" ]; then \
-			echo "$(YELLOW)🗂️  Organizing APIs...$(NC)"; \
-			$(PYTHON) mitmtool.py organize --input "$$CAPTURE" --output $(API_DIR); \
+			echo "$(YELLOW)📚 Generating enhanced reports...$(NC)"; \
+			$(PYTHON) generate_reports.py "$$CAPTURE" "$(OUTPUT_DIR)"; \
 			if [ $$? -eq 0 ]; then \
-				echo "$(GREEN)✅ APIs organized in: $(API_DIR)$(NC)"; \
-				echo "$(API_DIR)" > $(OUTPUT_DIR)/.last_organized; \
-				echo "$(YELLOW)📚 Generating enhanced reports...$(NC)"; \
-				$(PYTHON) generate_reports.py "$$CAPTURE" "$(OUTPUT_DIR)"; \
-				if [ $$? -eq 0 ]; then \
-					echo "$(GREEN)🎉 Session complete! All reports generated$(NC)"; \
-					echo "$(BLUE)🚀 API Docs: $(OUTPUT_DIR)/api_docs/viewer.html$(NC)"; \
-					echo "$(BLUE)🕒 Timeline: $(OUTPUT_DIR)/api_timeline/timeline.html$(NC)"; \
-					echo "$(BLUE)💡 Run 'make viewer' to open interactive docs$(NC)"; \
-				else \
-					echo "$(YELLOW)⚠️  Enhanced reports failed, but APIs are organized$(NC)"; \
-				fi; \
+				echo "$(GREEN)🎉 Session complete! All reports generated$(NC)"; \
+				echo "$(BLUE)🚀 API Docs: $(OUTPUT_DIR)/api_docs/viewer.html$(NC)"; \
+				echo "$(BLUE)🕒 Timeline: $(OUTPUT_DIR)/api_timeline/timeline.html$(NC)"; \
+				echo "$(BLUE)📡 Network Traffic: $(OUTPUT_DIR)/<domain>/<call_dirs>/$(NC)"; \
+				echo "$(BLUE)💡 Run 'make viewer' to open interactive docs$(NC)"; \
 			else \
-				echo "$(RED)❌ Failed to organize APIs$(NC)"; \
+				echo "$(YELLOW)⚠️  Enhanced reports failed$(NC)"; \
 			fi; \
 		else \
 			echo "$(YELLOW)⚠️  No capture file found$(NC)"; \
@@ -146,24 +139,32 @@ status:
 
 # View organized results
 view:
-	@if [ -f $(OUTPUT_DIR)/.last_organized ]; then \
-		API_DIR=$$(cat $(OUTPUT_DIR)/.last_organized); \
-		if [ -d "$$API_DIR" ]; then \
-			echo "$(BLUE)📂 Organized APIs: $$API_DIR$(NC)"; \
+	@if [ -d "$(OUTPUT_DIR)" ]; then \
+		echo "$(BLUE)📂 Network Traffic Results: $(OUTPUT_DIR)$(NC)"; \
+		echo ""; \
+		DOMAIN_COUNT=$$(find "$(OUTPUT_DIR)" -mindepth 1 -maxdepth 1 -type d ! -name "api_docs" ! -name "api_timeline" | wc -l | tr -d ' '); \
+		if [ $$DOMAIN_COUNT -gt 0 ]; then \
+			CALL_COUNT=$$(find "$(OUTPUT_DIR)" -name "request.json" -type f | wc -l | tr -d ' '); \
+			echo "$(GREEN)Found $$CALL_COUNT API calls across $$DOMAIN_COUNT domains:$(NC)"; \
 			echo ""; \
-			COUNT=$$(find "$$API_DIR" -name "request" -type f | wc -l | tr -d ' '); \
-			echo "$(GREEN)Found $$COUNT API calls:$(NC)"; \
-			find "$$API_DIR" -name "request" -type f | head -10 | while read file; do \
-				dir=$$(dirname "$$file"); \
-				endpoint=$$(basename "$$dir"); \
-				echo "  $(YELLOW)$$endpoint$(NC)"; \
+			find "$(OUTPUT_DIR)" -mindepth 1 -maxdepth 1 -type d ! -name "api_docs" ! -name "api_timeline" | head -5 | while read domain_dir; do \
+				domain=$$(basename "$$domain_dir"); \
+				call_count=$$(find "$$domain_dir" -name "request.json" -type f | wc -l | tr -d ' '); \
+				echo "  $(YELLOW)$$domain$(NC): $$call_count calls"; \
+				find "$$domain_dir" -mindepth 1 -maxdepth 1 -type d | head -3 | while read call_dir; do \
+					call_name=$$(basename "$$call_dir"); \
+					echo "    • $$call_name"; \
+				done; \
 			done; \
-			if [ $$COUNT -gt 10 ]; then echo "  $(BLUE)... and $$(($$COUNT - 10)) more$(NC)"; fi; \
+			if [ $$DOMAIN_COUNT -gt 5 ]; then echo "  $(BLUE)... and $$(($$DOMAIN_COUNT - 5)) more domains$(NC)"; fi; \
 			echo ""; \
-			echo "$(BLUE)💡 Browse: cd $$API_DIR$(NC)"; \
-			echo "$(BLUE)💡 Run requests: ./*/request$(NC)"; \
+			echo "$(BLUE)💡 Browse: cd $(OUTPUT_DIR)/<domain>/<call_dir>$(NC)"; \
+			echo "$(BLUE)💡 View request: cat request.json$(NC)"; \
+			echo "$(BLUE)💡 Test request: make request $(OUTPUT_DIR)/<domain>/<call_dir>$(NC)"; \
+			echo "$(BLUE)💡 Check auth: cat auth.txt$(NC)"; \
+			echo "$(BLUE)💡 View metadata: cat metadata.json$(NC)"; \
 		else \
-			echo "$(RED)❌ Results directory not found$(NC)"; \
+			echo "$(YELLOW)⚠️  No traffic recordings found$(NC)"; \
 		fi; \
 	else \
 		echo "$(YELLOW)⚠️  No results yet. Run 'make run' then 'make stop' first$(NC)"; \
@@ -244,3 +245,30 @@ open-timeline:
 	else \
 		echo "$(YELLOW)⚠️  No timeline found. Run 'make run' then 'make stop' first.$(NC)"; \
 	fi
+
+# Test API request from a specific directory
+request:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "$(YELLOW)⚠️  Usage: make request <directory_path>$(NC)"; \
+		echo "$(BLUE)💡 Example: make request $(OUTPUT_DIR)/airdna.com/post_submarkets_2024-08-02_14-30-15_001$(NC)"; \
+		exit 1; \
+	fi
+	@DIR="$(filter-out $@,$(MAKECMDGOALS))"; \
+	if [ ! -d "$$DIR" ]; then \
+		echo "$(RED)❌ Directory not found: $$DIR$(NC)"; \
+		exit 1; \
+	fi; \
+	if [ ! -f "$$DIR/request.json" ]; then \
+		echo "$(RED)❌ No request.json found in: $$DIR$(NC)"; \
+		exit 1; \
+	fi; \
+	echo "$(BLUE)🚀 Testing API request from: $$DIR$(NC)"; \
+	if [ -f venv/bin/activate ]; then \
+		cd "$$DIR" && source ../../../venv/bin/activate && python ../../../test_request.py .; \
+	else \
+		cd "$$DIR" && python3 ../../../test_request.py .; \
+	fi
+
+# Prevent make from treating directory arguments as targets
+%:
+	@:
