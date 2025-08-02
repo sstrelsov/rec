@@ -1,58 +1,87 @@
+# =============================================================================
 # mitmtool Configuration
-# This file controls what traffic gets captured and displayed
+# =============================================================================
+# This file controls traffic capture, filtering, and display behavior.
+# Modify settings here to customize your mitm proxy experience.
+#
+# After making changes, restart mitmtool for settings to take effect.
+# =============================================================================
 
 [general]
-# Output directory for captured data
+# Directory where captured data (timeline, API docs) will be saved
 output_dir = "output"
-# Port for the documentation viewer
+
+# Port for the built-in documentation viewer (http://localhost:port)
 viewer_port = 8000
 
 [filtering]
-# HTTP methods to include in timeline (select multiple)
-# Available: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, TRACE, CONNECT
+# =============================================================================
+# HTTP Methods - Which request types to capture
+# =============================================================================
+# Available methods: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, TRACE, CONNECT
+# Commonly used subset is selected by default for cleaner capture
 http_methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-# Request types to include
-include_browser_requests = true    # User browsing, page navigation
-include_api_requests = true        # API calls, JSON responses
-include_unknown_requests = true    # Requests with unclear context - ENABLED to catch HTML pages
+# =============================================================================
+# Request Categories - What types of traffic to include
+# =============================================================================
+include_browser_requests = true    # User navigation, page loads, form submissions
+include_api_requests = true        # JSON/REST API calls, GraphQL, RPC
+include_unknown_requests = true    # Requests that don't fit other categories
 
-# Noise filtering - set to false to see everything
-filter_static_assets = true       # .css, .js, .png, .jpg, etc.
-filter_browser_housekeeping = true # favicon.ico, robots.txt, manifest.json
-filter_health_checks = true       # /ping, /healthz, /status
-filter_prefetch_requests = true   # Browser prefetch/preload optimizations
+# =============================================================================
+# Noise Reduction - Filter out common clutter
+# =============================================================================
+# Enable these filters to focus on meaningful traffic
+filter_static_assets = true       # Images, CSS, JS, fonts, icons (.css, .js, .png, etc.)
+filter_browser_housekeeping = true # Browser metadata (favicon.ico, robots.txt, manifest.json)
+filter_health_checks = true       # Service monitoring endpoints (/ping, /healthz, /status)
+filter_prefetch_requests = true   # Browser optimization requests (prefetch, preload, dns-prefetch)
 
-# Ads/Analytics blocked patterns - requests matching these patterns will be filtered out
+# =============================================================================
+# Ad & Analytics Blocking - Traffic to completely filter out
+# =============================================================================
+# Requests matching these patterns will be blocked and not captured.
+# Add your own patterns to customize filtering behavior.
+#
+# Pattern matching rules:
+# - Matches against full URL, hostname, and path
+# - Case-insensitive substring matching
+# - Use domain names (e.g., "google-analytics.com") or paths (e.g., "/tracking")
+#
 blocked_patterns = [
-    # Google Analytics & Ads
+    # Google Analytics & Advertising
     "google-analytics.com", "googleanalytics.com", "google-analytics",
     "gtag", "gtm.js", "ga.js", "_ga", "googlesyndication.com",
     "doubleclick.net", "googleadservices.com",
 
-    # Social Media Tracking
+    # Social Media Tracking  
     "facebook.com/tr", "connect.facebook.net", "facebook.net",
 
-    # Analytics Services
-    "mixpanel.com", "amplitude.com", "segment.com", "segment.io",
+    # Third-party Analytics Services
+    "mixpanel.com", "amplitude.com", "segment.com", "segment.io", 
     "hotjar.com", "fullstory.com", "logrocket.com", "datadog",
 
-    # Common tracking paths
+    # Common tracking URL patterns
     "/pixel.gif", "/collect?", "/tr?", "/ads/", "/ad/", "/tracking",
     "/analytics", "/metrics", "/telemetry", "/beacon", "/ping"
 ]
 
 [timeline]
-# Timeline-specific settings
-auto_refresh = false
-default_items_per_page = 50
-show_response_times = true
-show_context_icons = true
+# =============================================================================
+# Timeline Display Settings
+# =============================================================================
+auto_refresh = false               # Automatically refresh timeline view
+default_items_per_page = 50       # Number of requests to show per page
+show_response_times = true         # Display request duration times
+show_context_icons = true          # Show icons indicating request type (browser/API/unknown)
 
 [api_extractor]
-# API documentation generation settings
-enabled = true
-min_calls_per_endpoint = 1
-max_examples_per_endpoint = 3
-include_request_headers = true
-include_response_examples = true
+# =============================================================================  
+# API Documentation Generation
+# =============================================================================
+enabled = true                     # Generate OpenAPI-style documentation from captured traffic
+min_calls_per_endpoint = 1         # Minimum requests needed before endpoint appears in docs
+max_examples_per_endpoint = 3      # Maximum request/response examples to include per endpoint
+include_request_headers = true     # Include HTTP headers in generated documentation
+include_response_examples = true   # Include response body examples in documentation

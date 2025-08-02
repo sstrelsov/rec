@@ -20,7 +20,7 @@ from typing import Dict, List, Any, Optional
 from mitmproxy import http, ctx
 import sys
 
-import config
+from config import config
 sys.path.append('.')
 from addons.context_detector import detect_request_context, RequestContext, get_context_info
 
