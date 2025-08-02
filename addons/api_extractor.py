@@ -64,7 +64,7 @@ class APIExtractor:
             "Enable automatic API documentation extraction"
         )
         loader.add_option(
-            "extractor_min_calls", int, 2,
+            "extractor_min_calls", int, 1,
             "Minimum calls per endpoint to include in documentation"
         )
         loader.add_option(
@@ -109,6 +109,21 @@ class APIExtractor:
 
         return False
 
+    def _get_options_value(self, option_name: str, default_value):
+        """Get option value with fallback for offline mode."""
+        try:
+            from mitmproxy import ctx
+            if hasattr(ctx, 'options') and hasattr(ctx.options, option_name):
+                return getattr(ctx.options, option_name)
+        except:
+            pass
+
+        # Always use 1 for min calls - we want to capture everything
+        if option_name == "extractor_min_calls":
+            return 1
+
+        return default_value
+
     def _is_api_request(self, flow: http.HTTPFlow) -> bool:
         """Determine if this is an API request worth documenting."""
         # Skip ads/analytics first
@@ -140,16 +155,6 @@ class APIExtractor:
                 return True
 
         return False
-
-    def _get_options_value(self, option_name: str, default_value):
-        """Get option value with fallback for offline mode."""
-        try:
-            from mitmproxy import ctx
-            if hasattr(ctx, 'options') and hasattr(ctx.options, option_name):
-                return getattr(ctx.options, option_name)
-        except:
-            pass
-        return default_value
 
     def _extract_api_info(self, flow: http.HTTPFlow):
         """Extract comprehensive API information."""
