@@ -15,10 +15,14 @@ from collections import defaultdict
 from typing import Dict, List, Any, Set
 from mitmproxy import http, ctx
 import sys
-sys.path.append('.')
+import os
+
+# Add parent directory to path to find config module  
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from addons.context_detector import detect_request_context, RequestContext, get_context_info
 from config import config
+from domain_utils import extract_root_domain, get_domain_hierarchy
 
 
 class APITimeline:
@@ -29,6 +33,7 @@ class APITimeline:
     def __init__(self):
         self.api_calls = []
         self.domains_seen = set()
+        self.root_domains_seen = set()
 
     def response(self, flow: http.HTTPFlow):
         """Process completed requests based on configuration."""
@@ -177,6 +182,9 @@ class APITimeline:
         # Detect request context
         context = detect_request_context(flow)
         context_info = get_context_info(context)
+        
+        # Extract domain hierarchy information
+        domain_info = get_domain_hierarchy(flow.request.pretty_host)
 
         # Extract key information
         call_info = {
@@ -186,6 +194,10 @@ class APITimeline:
             'url': flow.request.pretty_url,
             'host': flow.request.pretty_host,
             'path': flow.request.path,
+            'root_domain': domain_info['root_domain'],
+            'full_domain': domain_info['full_domain'],
+            'is_subdomain': domain_info['is_subdomain'],
+            'subdomain': domain_info['subdomain'],
             'status_code': flow.response.status_code if flow.response else None,
             'response_time_ms': round(response_time, 1),
             'response_size': len(flow.response.content) if flow.response and flow.response.content else 0,
@@ -199,6 +211,7 @@ class APITimeline:
 
         self.api_calls.append(call_info)
         self.domains_seen.add(flow.request.pretty_host)
+        self.root_domains_seen.add(domain_info['root_domain'])
 
         # Log interesting calls
         if call_info['is_error']:
@@ -235,12 +248,14 @@ class APITimeline:
                 'generated_at': datetime.now().isoformat(),
                 'total_calls': len(self.api_calls),
                 'unique_domains': len(self.domains_seen),
+                'unique_root_domains': len(self.root_domains_seen),
                 'time_range': {
                     'start': min(call['datetime'] for call in self.api_calls),
                     'end': max(call['datetime'] for call in self.api_calls)
                 }
             },
             'domains': list(self.domains_seen),
+            'root_domains': list(self.root_domains_seen),
             'timeline': self.api_calls
         }
 
@@ -252,6 +267,7 @@ class APITimeline:
         # Get unique methods and domains from the data
         unique_methods = sorted(set(call['method'] for call in self.api_calls))
         unique_domains = sorted(self.domains_seen)
+        unique_root_domains = sorted(self.root_domains_seen)
 
         # Generate method checkboxes based on config
         method_checkboxes = []
@@ -399,11 +415,23 @@ class APITimeline:
 
         <div class="filter-section">
             <h4>🌐 Domain Filter</h4>
-            <select id="domain-filter" onchange="applyFilters()" style="padding: 8px; border-radius: 4px;">
-                <option value="">All domains ({len(unique_domains)})</option>
-                {''.join(f'<option value="{domain}">{domain}</option>' for domain in unique_domains)}
-            </select>
-            <button class="reset-filters" onclick="resetFilters()">Reset All Filters</button>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <label for="root-domain-filter" style="font-size: 0.875rem; color: #666;">Root Domain:</label>
+                    <select id="root-domain-filter" onchange="applyFilters()" style="padding: 8px; border-radius: 4px;">
+                        <option value="">All root domains ({len(unique_root_domains)})</option>
+                        {''.join(f'<option value="{domain}">{domain}</option>' for domain in unique_root_domains)}
+                    </select>
+                </div>
+                <div>
+                    <label for="domain-filter" style="font-size: 0.875rem; color: #666;">Full Domain:</label>
+                    <select id="domain-filter" onchange="applyFilters()" style="padding: 8px; border-radius: 4px;">
+                        <option value="">All domains ({len(unique_domains)})</option>
+                        {''.join(f'<option value="{domain}">{domain}</option>' for domain in unique_domains)}
+                    </select>
+                </div>
+                <button class="reset-filters" onclick="resetFilters()">Reset All Filters</button>
+            </div>
         </div>
 
         <div class="filter-summary" id="filter-summary">
@@ -431,7 +459,8 @@ class APITimeline:
                 .filter(cb => cb.checked)
                 .map(cb => cb.value);
 
-            // Get selected domain
+            // Get selected domains
+            const rootDomainFilter = document.getElementById('root-domain-filter').value;
             const domainFilter = document.getElementById('domain-filter').value;
 
             // Apply filters to all calls
@@ -452,8 +481,13 @@ class APITimeline:
                     show = false;
                 }}
 
-                // Domain filter
-                if (domainFilter && !callData.url.includes(domainFilter)) {{
+                // Root domain filter
+                if (rootDomainFilter && callData.root_domain !== rootDomainFilter) {{
+                    show = false;
+                }}
+
+                // Full domain filter
+                if (domainFilter && callData.host !== domainFilter) {{
                     show = false;
                 }}
 
@@ -482,7 +516,8 @@ class APITimeline:
             document.querySelector('#context-filters input[value="api"]').checked = {json.dumps(config.include_api_requests)};
             document.querySelector('#context-filters input[value="unknown"]').checked = {json.dumps(config.include_unknown_requests)};
 
-            // Reset domain filter
+            // Reset domain filters
+            document.getElementById('root-domain-filter').value = '';
             document.getElementById('domain-filter').value = '';
 
             // Apply filters
@@ -537,13 +572,24 @@ class APITimeline:
 
         # Domain statistics
         domain_counts = defaultdict(int)
+        root_domain_counts = defaultdict(int)
         context_counts = defaultdict(int)
         for call in self.api_calls:
             domain_counts[call['host']] += 1
+            root_domain_counts[call['root_domain']] += 1
             context_counts[call.get('context', 'unknown')] += 1
 
         md_content.extend([
-            "### Top Domains:",
+            "### Top Root Domains:",
+            ""
+        ])
+
+        for root_domain, count in sorted(root_domain_counts.items(), key=lambda x: x[1], reverse=True)[:10]:
+            md_content.append(f"- **{root_domain}**: {count} calls")
+
+        md_content.extend([
+            "",
+            "### Top Full Domains:",
             ""
         ])
 
@@ -613,6 +659,7 @@ class APITimeline:
         with open(output_path / 'timeline.csv', 'w', newline='') as f:
             writer = csv.DictWriter(f, fieldnames=[
                 'timestamp', 'datetime', 'method', 'host', 'path', 'url',
+                'root_domain', 'full_domain', 'is_subdomain', 'subdomain',
                 'status_code', 'response_time_ms', 'response_size', 'content_type', 'is_error',
                 'context', 'context_name', 'context_icon', 'context_description'
             ])
@@ -627,9 +674,11 @@ class APITimeline:
         return {
             'total_calls': len(self.api_calls),
             'unique_domains': len(self.domains_seen),
+            'unique_root_domains': len(self.root_domains_seen),
             'error_count': len([c for c in self.api_calls if c['is_error']]),
             'avg_response_time': sum(c['response_time_ms'] for c in self.api_calls) / len(self.api_calls),
             'domains': list(self.domains_seen),
+            'root_domains': list(self.root_domains_seen),
             'time_range': {
                 'start': min(call['datetime'] for call in self.api_calls),
                 'end': max(call['datetime'] for call in self.api_calls)

@@ -16,30 +16,40 @@ from typing import Dict, List, Any, Set, Optional
 from urllib.parse import urlparse, parse_qs
 from mitmproxy import http, ctx
 import sys
-sys.path.append('.')
+import os
+import time
+
+# Add parent directory to path to find config module
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from addons.context_detector import detect_request_context, RequestContext, get_context_info
 from config import config
-import time
+from domain_utils import extract_root_domain, get_domain_hierarchy
 
 
 class APIExtractor:
     """Advanced API documentation generator from captured traffic."""
 
     def __init__(self):
+        # Organize APIs by root domain, then by full domain
         self.api_catalog = defaultdict(lambda: {
-            'endpoints': defaultdict(lambda: {
-                'methods': defaultdict(lambda: {
-                    'count': 0,
-                    'parameters': {'query': set(), 'path': set(), 'headers': set(), 'body_fields': set()},
-                    'request_examples': [],
-                    'response_schemas': defaultdict(int),  # Schema -> count
-                    'status_codes': defaultdict(int),
-                    'response_examples': {},
-                    'content_types': {'request': set(), 'response': set()},
-                    'contexts': defaultdict(int)  # Track request contexts
-                })
+            'domains': defaultdict(lambda: {
+                'endpoints': defaultdict(lambda: {
+                    'methods': defaultdict(lambda: {
+                        'count': 0,
+                        'parameters': {'query': set(), 'path': set(), 'headers': set(), 'body_fields': set()},
+                        'request_examples': [],
+                        'response_schemas': defaultdict(int),  # Schema -> count
+                        'status_codes': defaultdict(int),
+                        'response_examples': {},
+                        'content_types': {'request': set(), 'response': set()},
+                        'contexts': defaultdict(int)  # Track request contexts
+                    })
+                }),
+                'base_url': '',
+                'total_calls': 0,
+                'context_stats': defaultdict(int)
             }),
-            'base_url': '',
             'total_calls': 0,
             'context_stats': defaultdict(int)
         })
@@ -180,12 +190,19 @@ class APIExtractor:
         domain = parsed_url.netloc
         path = parsed_url.path
         query_params = parse_qs(parsed_url.query)
+        
+        # Get domain hierarchy information
+        domain_info = get_domain_hierarchy(domain)
+        root_domain = domain_info['root_domain']
 
         # Normalize path for grouping
         normalized_path = self._normalize_path(path)
 
-        # Get API catalog entry
-        api = self.api_catalog[domain]
+        # Get API catalog entry (organized by root domain, then full domain)
+        root_api = self.api_catalog[root_domain]
+        root_api['total_calls'] += 1
+        
+        api = root_api['domains'][domain]
         api['base_url'] = f"{parsed_url.scheme}://{parsed_url.netloc}"
         api['total_calls'] += 1
 
@@ -197,6 +214,7 @@ class APIExtractor:
         context = detect_request_context(flow)
         method_data['contexts'][context.value] += 1
         api['context_stats'][context.value] += 1
+        root_api['context_stats'][context.value] += 1
 
         # Extract parameters
         self._extract_parameters(flow, method_data, query_params, normalized_path, path)
@@ -371,7 +389,7 @@ class APIExtractor:
             return "unknown"
 
     def export_documentation(self, output_dir: str = "api_docs"):
-        """Export comprehensive API documentation."""
+        """Export comprehensive API documentation grouped by root domain."""
         from pathlib import Path
 
         output_path = Path(output_dir)
@@ -379,43 +397,55 @@ class APIExtractor:
 
         domains_with_docs = []
 
-        # Generate documentation for each domain
-        for domain, api_data in self.api_catalog.items():
-            if api_data['total_calls'] < config.min_calls_per_endpoint:
+        # Generate documentation for each root domain
+        for root_domain, root_api_data in self.api_catalog.items():
+            if root_api_data['total_calls'] < config.min_calls_per_endpoint:
                 continue
 
-            domain_dir = output_path / self._sanitize_filename(domain)
-            domain_dir.mkdir(exist_ok=True)
+            root_domain_dir = output_path / self._sanitize_filename(root_domain)
+            root_domain_dir.mkdir(exist_ok=True)
 
-            # Generate OpenAPI spec
-            openapi_spec = self._generate_openapi_spec(domain)
+            # Create a combined OpenAPI spec for all domains under this root
+            combined_spec = self._generate_combined_openapi_spec(root_domain, root_api_data)
 
-            # Save as JSON
-            with open(domain_dir / "openapi.json", 'w') as f:
-                json.dump(openapi_spec, f, indent=2)
+            # Save combined spec
+            with open(root_domain_dir / "openapi.json", 'w') as f:
+                json.dump(combined_spec, f, indent=2)
 
-            # Generate summary report
-            self._generate_summary_report(domain, api_data, domain_dir)
+            # Generate summary report for the root domain
+            self._generate_root_domain_summary_report(root_domain, root_api_data, root_domain_dir)
+
+            # Also generate individual specs for each full domain
+            for domain, api_data in root_api_data['domains'].items():
+                if api_data['total_calls'] < config.min_calls_per_endpoint:
+                    continue
+
+                domain_spec = self._generate_openapi_spec(domain, api_data)
+                domain_file = root_domain_dir / f"{self._sanitize_filename(domain)}.json"
+                
+                with open(domain_file, 'w') as f:
+                    json.dump(domain_spec, f, indent=2)
 
             domains_with_docs.append({
-                'domain': domain,
-                'title': openapi_spec['info']['title'],
-                'total_calls': api_data['total_calls'],
-                'endpoint_count': len([ep for ep in api_data['endpoints'].values()
-                                     if any(m['count'] >= config.min_calls_per_endpoint
-                                           for m in ep['methods'].values())])
+                'root_domain': root_domain,
+                'title': combined_spec['info']['title'],
+                'total_calls': root_api_data['total_calls'],
+                'domain_count': len(root_api_data['domains']),
+                'endpoint_count': sum(len([ep for ep in api_data['endpoints'].values()
+                                         if any(m['count'] >= config.min_calls_per_endpoint
+                                               for m in ep['methods'].values())])
+                                     for api_data in root_api_data['domains'].values())
             })
 
-            logging.info(f"📚 Generated API documentation for {domain} in {domain_dir}")
+            logging.info(f"📚 Generated API documentation for {root_domain} in {root_domain_dir}")
 
         # Generate interactive viewer
         if domains_with_docs:
             self._generate_viewer_html(output_path, domains_with_docs)
             logging.info(f"🚀 Generated interactive viewer: {output_path}/viewer.html")
 
-    def _generate_openapi_spec(self, domain: str) -> Dict[str, Any]:
-        """Generate OpenAPI 3.0 specification from captured APIs."""
-        api_data = self.api_catalog[domain]
+    def _generate_openapi_spec(self, domain: str, api_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate OpenAPI 3.0 specification from captured APIs for a specific domain."""
         min_calls = config.min_calls_per_endpoint
 
         spec = {
@@ -499,6 +529,168 @@ class APIExtractor:
                 spec["paths"][path] = path_spec
 
         return spec
+    
+    def _generate_combined_openapi_spec(self, root_domain: str, root_api_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Generate combined OpenAPI spec for all domains under a root domain."""
+        min_calls = config.min_calls_per_endpoint
+
+        spec = {
+            "openapi": "3.0.0",
+            "info": {
+                "title": f"API Documentation: {root_domain}",
+                "version": "1.0.0",
+                "description": f"Combined API documentation for {root_domain} and subdomains"
+            },
+            "servers": [],
+            "paths": {}
+        }
+
+        # Collect all servers
+        servers_seen = set()
+        
+        # Process each domain under this root
+        for domain, api_data in root_api_data['domains'].items():
+            if api_data['total_calls'] < min_calls:
+                continue
+                
+            # Add server if not already added
+            if api_data['base_url'] and api_data['base_url'] not in servers_seen:
+                spec["servers"].append({"url": api_data['base_url'], "description": domain})
+                servers_seen.add(api_data['base_url'])
+
+            # Process endpoints for this domain
+            for path, endpoint_data in api_data['endpoints'].items():
+                # Prefix path with domain if multiple domains exist
+                display_path = path
+                if len(root_api_data['domains']) > 1:
+                    display_path = f"[{domain}]{path}"
+                
+                path_spec = {}
+
+                for method, method_data in endpoint_data['methods'].items():
+                    if method_data['count'] < min_calls:
+                        continue
+
+                    # Build method specification
+                    method_spec = {
+                        "summary": f"{method} {path} ({domain})",
+                        "description": f"Captured {method_data['count']} calls from {domain}",
+                        "parameters": [],
+                        "responses": {}
+                    }
+
+                    # Add server selection if multiple servers
+                    if len(spec["servers"]) > 1:
+                        method_spec["servers"] = [{"url": api_data['base_url']}]
+
+                    # Add parameters
+                    params = method_data['parameters']
+
+                    # Query parameters
+                    for param in params['query']:
+                        method_spec["parameters"].append({
+                            "name": param,
+                            "in": "query",
+                            "schema": {"type": "string"}
+                        })
+
+                    # Path parameters
+                    for param in params['path']:
+                        method_spec["parameters"].append({
+                            "name": param,
+                            "in": "path",
+                            "required": True,
+                            "schema": {"type": "string"}
+                        })
+
+                    # Request body (for POST/PUT/PATCH)
+                    if method in ['POST', 'PUT', 'PATCH'] and method_data['request_examples']:
+                        example = method_data['request_examples'][0]
+                        if 'body' in example:
+                            method_spec["requestBody"] = {
+                                "content": {
+                                    "application/json": {
+                                        "schema": {"type": "object"},
+                                        "example": example['body']
+                                    }
+                                }
+                            }
+
+                    # Responses
+                    for status_code, count in method_data['status_codes'].items():
+                        response_spec = {"description": f"Response (seen {count} times)"}
+
+                        if status_code in method_data['response_examples']:
+                            example = method_data['response_examples'][status_code]
+                            response_spec["content"] = {
+                                "application/json": {
+                                    "schema": {"type": "object"},
+                                    "example": example['body']
+                                }
+                            }
+
+                        method_spec["responses"][str(status_code)] = response_spec
+
+                    path_spec[method.lower()] = method_spec
+
+                if path_spec:
+                    spec["paths"][display_path] = path_spec
+
+        return spec
+
+    def _generate_root_domain_summary_report(self, root_domain: str, root_api_data: Dict, output_dir):
+        """Generate human-readable summary report for a root domain."""
+        # Calculate context statistics for the entire root domain
+        context_stats = root_api_data.get('context_stats', {})
+        context_summary = []
+        for context, count in sorted(context_stats.items()):
+            icon = "🌐" if context == "browser" else "⚡" if context == "api" else "❓"
+            context_summary.append(f"**{icon} {context.title()}:** {count} calls")
+
+        report = [
+            f"# API Documentation: {root_domain}",
+            f"",
+            f"**Root Domain:** {root_domain}",
+            f"**Total API Calls:** {root_api_data['total_calls']}",
+            f"**Subdomains Discovered:** {len(root_api_data['domains'])}",
+            f"",
+            f"## Request Context Distribution",
+            f"",
+            *context_summary,
+            f"",
+            f"## Subdomains",
+            f""
+        ]
+
+        # List all subdomains
+        for domain, api_data in sorted(root_api_data['domains'].items()):
+            total_calls = api_data['total_calls']
+            endpoint_count = len(api_data['endpoints'])
+            
+            report.extend([
+                f"### {domain}",
+                f"",
+                f"**Base URL:** {api_data['base_url']}",
+                f"**Total Calls:** {total_calls}",
+                f"**Endpoints:** {endpoint_count}",
+                f""
+            ])
+
+            # Show top endpoints for this domain
+            if api_data['endpoints']:
+                report.append("**Top Endpoints:**")
+                endpoint_calls = [(path, sum(m['count'] for m in ep['methods'].values()))
+                                for path, ep in api_data['endpoints'].items()]
+                top_endpoints = sorted(endpoint_calls, key=lambda x: x[1], reverse=True)[:5]
+                
+                for path, calls in top_endpoints:
+                    methods = list(api_data['endpoints'][path]['methods'].keys())
+                    report.append(f"- `{path}` [{', '.join(methods)}]: {calls} calls")
+                
+                report.append("")
+
+        with open(output_dir / "README.md", 'w') as f:
+            f.write('\n'.join(report))
 
     def _generate_summary_report(self, domain: str, api_data: Dict, output_dir):
         """Generate human-readable summary report."""
@@ -632,18 +824,18 @@ class APIExtractor:
 <body>
     <div class="header">
         <div>
-            <h1>🚀 API Documentation</h1>
-            <div class="stats">{len(domains_with_docs)} APIs • {sum(d['total_calls'] for d in domains_with_docs)} total calls</div>
+            <h1>🚀 API Documentation (Grouped by Root Domain)</h1>
+            <div class="stats">{len(domains_with_docs)} root domains • {sum(d['total_calls'] for d in domains_with_docs)} total calls</div>
         </div>
         <select class="api-selector" id="apiSelector" onchange="loadAPI()">
-            <option value="">Select an API to view...</option>
-            {chr(10).join(f'<option value="{d["domain"]}">{d["title"]} ({d["total_calls"]} calls)</option>' for d in domains_with_docs)}
+            <option value="">Select a root domain to view...</option>
+            {chr(10).join(f'<option value="{d["root_domain"]}">{d["title"]} ({d["total_calls"]} calls, {d["domain_count"]} domains)</option>' for d in domains_with_docs)}
         </select>
     </div>
 
     <div id="swagger-ui" class="swagger-container">
         <div class="loading">
-            📚 Select an API from the dropdown above to view its documentation
+            📚 Select a root domain from the dropdown above to view its API documentation
         </div>
     </div>
 
@@ -654,16 +846,16 @@ class APIExtractor:
 
         function loadAPI() {{
             const selector = document.getElementById('apiSelector');
-            const selectedDomain = selector.value;
+            const selectedRootDomain = selector.value;
 
-            if (!selectedDomain) {{
+            if (!selectedRootDomain) {{
                 document.getElementById('swagger-ui').innerHTML =
-                    '<div class="loading">📚 Select an API from the dropdown above to view its documentation</div>';
+                    '<div class="loading">📚 Select a root domain from the dropdown above to view its API documentation</div>';
                 return;
             }}
 
             // Sanitize domain name for file path (same logic as _sanitize_filename)
-            const sanitizedDomain = selectedDomain.replace(/[^\\w\\-_.]/g, '_');
+            const sanitizedDomain = selectedRootDomain.replace(/[^\\w\\-_.]/g, '_');
             const specUrl = `./${{sanitizedDomain}}/openapi.json`;
 
             if (ui) {{
@@ -679,12 +871,12 @@ class APIExtractor:
                     SwaggerUIBundle.presets.standalone
                 ],
                 onComplete: function() {{
-                    console.log('API documentation loaded for:', selectedDomain);
+                    console.log('API documentation loaded for root domain:', selectedRootDomain);
                 }},
                 onFailure: function(err) {{
                     console.error('Failed to load API spec:', err);
                     document.getElementById('swagger-ui').innerHTML =
-                        '<div class="loading">❌ Failed to load API documentation for ' + selectedDomain + '</div>';
+                        '<div class="loading">❌ Failed to load API documentation for ' + selectedRootDomain + '</div>';
                 }}
             }});
         }}

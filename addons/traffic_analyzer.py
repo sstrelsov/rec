@@ -19,9 +19,12 @@ from collections import defaultdict
 from typing import Dict, List, Any, Optional
 from mitmproxy import http, ctx
 import sys
+import os
+
+# Add parent directory to path to find config module
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import config
-sys.path.append('.')
 from addons.context_detector import detect_request_context, RequestContext, get_context_info
 
 

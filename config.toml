@@ -55,17 +55,46 @@ blocked_patterns = [
     "gtag", "gtm.js", "ga.js", "_ga", "googlesyndication.com",
     "doubleclick.net", "googleadservices.com",
 
-    # Social Media Tracking  
+    # Social Media Tracking
     "facebook.com/tr", "connect.facebook.net", "facebook.net",
 
-    # Third-party Analytics Services
-    "mixpanel.com", "amplitude.com", "segment.com", "segment.io", 
+    # Third-party Analytics & Ad Services
+    "mixpanel.com", "amplitude.com", "segment.com", "segment.io",
     "hotjar.com", "fullstory.com", "logrocket.com", "datadog",
+
+    # Additional Ad/Tracking Domains
+    "amazon-adsystem.com",
+    "bidswitch.net",
+    "casalemedia.com",
+    "chartbeat.com",
+    "clarity.ms",
+    "crazyegg.com",
+    "criteo.com",
+    "doubleverify.com",
+    "grsm.io",
+    "hgrtb.com",
+    "kargo.com",
+    "launchdarkly.com",
+    "megaphone.fm",
+    "mfadsrvr.com",
+    "openx.net",
+    "partnerlinks.io",
+    "permutive.com",
+    "pubmatic.com",
+    "rubiconproject.com",
+    "scorecardresearch.com",
+    "stickyadstv.com",
+    "stripe.network",
+    "teads.tv",
+    "truste.com",
+    "trustx.org",
+    "zeustechnology.com",
 
     # Common tracking URL patterns
     "/pixel.gif", "/collect?", "/tr?", "/ads/", "/ad/", "/tracking",
     "/analytics", "/metrics", "/telemetry", "/beacon", "/ping"
 ]
+
 
 [timeline]
 # =============================================================================
@@ -77,7 +106,7 @@ show_response_times = true         # Display request duration times
 show_context_icons = true          # Show icons indicating request type (browser/API/unknown)
 
 [api_extractor]
-# =============================================================================  
+# =============================================================================
 # API Documentation Generation
 # =============================================================================
 enabled = true                     # Generate OpenAPI-style documentation from captured traffic
