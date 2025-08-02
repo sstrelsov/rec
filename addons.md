@@ -314,38 +314,39 @@ python mitmtool.py run --basic  # No addons
 ### **Directory Structure**
 ```
 mitm/
-├── capture_TIMESTAMP.mitm          # Raw mitmproxy dump
-├── api_calls_TIMESTAMP/            # Original organized structure
-├── api_docs/                       # 📚 API Documentation
-│   ├── viewer.html                 # Interactive viewer
-│   ├── domain1.com/
-│   │   ├── openapi.json           # OpenAPI 3.0 spec
-│   │   └── README.md              # Human-readable docs
-│   └── domain2.com/
-│       ├── openapi.json
-│       └── README.md
-└── api_timeline/                   # 🕒 Timeline Visualization
-    ├── timeline.html              # Interactive timeline
-    ├── timeline.json              # Raw timeline data
-    ├── timeline.csv               # Spreadsheet format
-    └── timeline.md                # Text summary
+└── output/                         # 📁 All outputs organized here
+    ├── capture_TIMESTAMP.mitm      # Raw mitmproxy dump
+    ├── api_calls_TIMESTAMP/        # Original organized structure
+    ├── api_docs/                   # 📚 API Documentation
+    │   ├── viewer.html             # Interactive viewer
+    │   ├── domain1.com/
+    │   │   ├── openapi.json       # OpenAPI 3.0 spec
+    │   │   └── README.md          # Human-readable docs
+    │   └── domain2.com/
+    │       ├── openapi.json
+    │       └── README.md
+    └── api_timeline/               # 🕒 Timeline Visualization
+        ├── timeline.html          # Interactive timeline
+        ├── timeline.json          # Raw timeline data
+        ├── timeline.csv           # Spreadsheet format
+        └── timeline.md            # Text summary
 ```
 
 ### **File Descriptions**
 
-**`api_docs/viewer.html`**
+**`output/api_docs/viewer.html`**
 - Interactive Swagger UI viewer
 - Dropdown to select different APIs
 - Full documentation browser
 - Requires local server to avoid CORS
 
-**`api_docs/domain.com/openapi.json`**
+**`output/api_docs/domain.com/openapi.json`**
 - Complete OpenAPI 3.0 specification
 - Import into Postman, Insomnia, etc.
 - Use with code generators
 - Validates with Swagger tools
 
-**`api_docs/domain.com/README.md`**
+**`output/api_docs/domain.com/README.md`**
 - Human-readable API summary
 - Endpoint list with call counts
 - Parameter summaries

@@ -2,10 +2,11 @@
 # Quick workflow: make run → browse normally → make stop → make view
 
 # Configuration
-CAPTURE_FILE := capture_$(shell date +%Y%m%d_%H%M%S).mitm
-LAST_CAPTURE := .last_capture
-API_DIR := api_calls_$(shell date +%Y%m%d_%H%M%S)
-PID_FILE := .mitmtool.pid
+OUTPUT_DIR := output
+CAPTURE_FILE := $(OUTPUT_DIR)/capture_$(shell date +%Y%m%d_%H%M%S).mitm
+LAST_CAPTURE := $(OUTPUT_DIR)/.last_capture
+API_DIR := $(OUTPUT_DIR)/api_calls_$(shell date +%Y%m%d_%H%M%S)
+PID_FILE := $(OUTPUT_DIR)/.mitmtool.pid
 PYTHON := python3
 
 # Colors
@@ -44,6 +45,7 @@ help:
 # Main command - start everything at once
 run:
 	@echo "$(BLUE)🚀 Starting mitmproxy capture session...$(NC)"
+	@mkdir -p $(OUTPUT_DIR)
 	@if [ -f $(PID_FILE) ]; then \
 		PID=$$(cat $(PID_FILE)); \
 		if ps -p $$PID > /dev/null 2>&1; then \
@@ -61,14 +63,14 @@ run:
 	@echo "$(BLUE)💡 Run 'make stop' when finished$(NC)"
 	@echo ""
 	@echo "$(CAPTURE_FILE)" > $(LAST_CAPTURE)
-	@$(PYTHON) mitmtool.py run --output $(CAPTURE_FILE) > capture.log 2>&1 & echo $$! > $(PID_FILE)
+	@$(PYTHON) mitmtool.py run --output $(CAPTURE_FILE) > $(OUTPUT_DIR)/capture.log 2>&1 & echo $$! > $(PID_FILE)
 	@sleep 2
 	@if [ -f $(PID_FILE) ] && ps -p $$(cat $(PID_FILE)) > /dev/null 2>&1; then \
 		echo "$(GREEN)✅ Session started successfully$(NC)"; \
 		echo "$(BLUE)📊 Proxy active on http://127.0.0.1:8080$(NC)"; \
 	else \
 		echo "$(RED)❌ Failed to start session$(NC)"; \
-		if [ -f capture.log ]; then tail -3 capture.log; fi; \
+		if [ -f $(OUTPUT_DIR)/capture.log ]; then tail -3 $(OUTPUT_DIR)/capture.log; fi; \
 		rm -f $(PID_FILE); \
 		exit 1; \
 	fi
@@ -94,7 +96,7 @@ stop:
 			$(PYTHON) mitmtool.py organize --input "$$CAPTURE" --output $(API_DIR); \
 			if [ $$? -eq 0 ]; then \
 				echo "$(GREEN)✅ Session complete! APIs organized in: $(API_DIR)$(NC)"; \
-				echo "$(API_DIR)" > .last_organized; \
+				echo "$(API_DIR)" > $(OUTPUT_DIR)/.last_organized; \
 				echo "$(BLUE)💡 Run 'make view' to browse results$(NC)"; \
 			else \
 				echo "$(RED)❌ Failed to organize APIs$(NC)"; \
@@ -125,8 +127,8 @@ status:
 
 # View organized results
 view:
-	@if [ -f .last_organized ]; then \
-		API_DIR=$$(cat .last_organized); \
+	@if [ -f $(OUTPUT_DIR)/.last_organized ]; then \
+		API_DIR=$$(cat $(OUTPUT_DIR)/.last_organized); \
 		if [ -d "$$API_DIR" ]; then \
 			echo "$(BLUE)📂 Organized APIs: $$API_DIR$(NC)"; \
 			echo ""; \
@@ -155,13 +157,14 @@ clean:
 		echo "$(YELLOW)🛑 Stopping active session first...$(NC)"; \
 		$(MAKE) stop; \
 	fi
-	@rm -f *.mitm capture.log $(LAST_CAPTURE) $(PID_FILE) .last_organized
-	@rm -rf api_calls_* api_docs api_timeline *.pyc __pycache__ .DS_Store
+	@rm -rf $(OUTPUT_DIR)
+	@rm -f *.pyc __pycache__ .DS_Store
 	@echo "$(GREEN)✅ All files removed$(NC)"
 
 # Run in basic mode (no enhanced features)
 basic:
 	@echo "$(BLUE)🔧 Starting basic capture session (enhanced features disabled)...$(NC)"
+	@mkdir -p $(OUTPUT_DIR)
 	@if [ -f $(PID_FILE) ]; then \
 		PID=$$(cat $(PID_FILE)); \
 		if ps -p $$PID > /dev/null 2>&1; then \
@@ -172,7 +175,7 @@ basic:
 		fi; \
 	fi
 	@echo "$(CAPTURE_FILE)" > $(LAST_CAPTURE)
-	@$(PYTHON) mitmtool.py run --basic --output $(CAPTURE_FILE) > capture.log 2>&1 & echo $$! > $(PID_FILE)
+	@$(PYTHON) mitmtool.py run --basic --output $(CAPTURE_FILE) > $(OUTPUT_DIR)/capture.log 2>&1 & echo $$! > $(PID_FILE)
 	@sleep 2
 	@if [ -f $(PID_FILE) ] && ps -p $$(cat $(PID_FILE)) > /dev/null 2>&1; then \
 		echo "$(GREEN)✅ Basic session started$(NC)"; \
@@ -188,16 +191,16 @@ timeline:
 		CAPTURE=$$(cat $(LAST_CAPTURE)); \
 		if [ -f "$$CAPTURE" ]; then \
 			echo "$(BLUE)🕒 Generating timeline from $$CAPTURE...$(NC)"; \
-			$(PYTHON) generate_reports.py "$$CAPTURE"; \
+			$(PYTHON) generate_reports.py "$$CAPTURE" "$(OUTPUT_DIR)"; \
 			if [ $$? -eq 0 ]; then \
-				echo "$(GREEN)✅ Timeline generated: api_timeline/timeline.html$(NC)"; \
+				echo "$(GREEN)✅ Timeline generated: $(OUTPUT_DIR)/api_timeline/timeline.html$(NC)"; \
 				echo "$(BLUE)💡 Open in browser to view chronological API calls$(NC)"; \
 			fi; \
 		else \
 			echo "$(RED)❌ Capture file not found: $$CAPTURE$(NC)"; \
 		fi; \
 	else \
-		echo "$(YELLOW)⚠️  No recent capture found. Specify file: python generate_reports.py your_file.mitm$(NC)"; \
+		echo "$(YELLOW)⚠️  No recent capture found. Specify file: python generate_reports.py your_file.mitm $(OUTPUT_DIR)$(NC)"; \
 	fi
 
 # Generate API docs (alias for timeline)
@@ -205,20 +208,20 @@ docs: timeline
 
 # Open API documentation viewer in browser
 viewer:
-	@if [ -d "api_docs" ]; then \
+	@if [ -d "$(OUTPUT_DIR)/api_docs" ]; then \
 		echo "$(BLUE)🚀 Starting API documentation server...$(NC)"; \
 		echo "$(GREEN)💡 This will open your browser automatically$(NC)"; \
 		echo "$(GREEN)📚 Press Ctrl+C to stop the server when done$(NC)"; \
-		$(PYTHON) serve_docs.py; \
+		$(PYTHON) serve_docs.py $(OUTPUT_DIR)/api_docs; \
 	else \
 		echo "$(YELLOW)⚠️  No API docs found. Run 'make run' then 'make stop' first.$(NC)"; \
 	fi
 
 # Open timeline in browser
 open-timeline:
-	@if [ -f "api_timeline/timeline.html" ]; then \
+	@if [ -f "$(OUTPUT_DIR)/api_timeline/timeline.html" ]; then \
 		echo "$(BLUE)🕒 Opening API timeline...$(NC)"; \
-		open api_timeline/timeline.html; \
+		open $(OUTPUT_DIR)/api_timeline/timeline.html; \
 	else \
 		echo "$(YELLOW)⚠️  No timeline found. Run 'make run' then 'make stop' first.$(NC)"; \
 	fi

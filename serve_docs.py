@@ -12,17 +12,22 @@ import os
 import sys
 from pathlib import Path
 
-def serve_docs(port=8000):
+def serve_docs(docs_dir="output/api_docs", port=8000):
     """Start a local HTTP server in the api_docs directory."""
 
+    docs_path = Path(docs_dir)
+
     # Check if api_docs exists
-    if not Path("api_docs").exists():
-        print("❌ No api_docs directory found!")
+    if not docs_path.exists():
+        print(f"❌ No api_docs directory found at: {docs_path.absolute()}")
         print("💡 Run 'make run' then 'make stop' to generate API documentation first.")
         return False
 
+    # Get original directory to return to later
+    original_dir = os.getcwd()
+
     # Change to api_docs directory
-    os.chdir("api_docs")
+    os.chdir(docs_path)
 
     # Create server
     handler = http.server.SimpleHTTPRequestHandler
@@ -31,7 +36,12 @@ def serve_docs(port=8000):
         with socketserver.TCPServer(("", port), handler) as httpd:
             print(f"🚀 Starting HTTP server on port {port}")
             print(f"📚 API Documentation: http://localhost:{port}/viewer.html")
-            print(f"🕒 Timeline: http://localhost:{port}/../api_timeline/timeline.html")
+
+            # Check if timeline exists
+            timeline_path = docs_path.parent / "api_timeline" / "timeline.html"
+            if timeline_path.exists():
+                print(f"🕒 Timeline: http://localhost:{port}/../api_timeline/timeline.html")
+
             print()
             print("💡 Press Ctrl+C to stop the server")
 
@@ -52,6 +62,9 @@ def serve_docs(port=8000):
         else:
             print(f"❌ Server error: {e}")
             return False
+    finally:
+        # Return to original directory
+        os.chdir(original_dir)
 
 def main():
     import argparse
@@ -61,14 +74,17 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python serve_docs.py              # Default port 8000
-  python serve_docs.py -p 8080      # Custom port
-  python serve_docs.py --open-only  # Just open browser (if server running)
+  python serve_docs.py                         # Default: output/api_docs, port 8000
+  python serve_docs.py output/api_docs         # Specific directory
+  python serve_docs.py -p 8080                 # Custom port
+  python serve_docs.py --open-only             # Just open browser (if server running)
 
 This solves CORS issues when viewing OpenAPI specs in browsers.
 """
     )
 
+    parser.add_argument('docs_dir', nargs='?', default='output/api_docs',
+                       help='Path to api_docs directory (default: output/api_docs)')
     parser.add_argument('-p', '--port', type=int, default=8000,
                        help='Port to serve on (default: 8000)')
     parser.add_argument('--open-only', action='store_true',
@@ -82,7 +98,8 @@ This solves CORS issues when viewing OpenAPI specs in browsers.
         return
 
     print("🚀 Starting API Documentation Server...")
-    success = serve_docs(args.port)
+    print(f"📁 Serving: {args.docs_dir}")
+    success = serve_docs(args.docs_dir, args.port)
 
     if not success:
         sys.exit(1)

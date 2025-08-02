@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 """
-generate_reports.py - Generate Enhanced Reports from Existing Captures
+Enhanced Report Generator for MITM Capture Files
 
-Run this on your existing .mitm files to get the API documentation and timeline
-without having to recapture everything.
+Generates comprehensive API documentation and timeline visualizations
+from captured mitmproxy dump files.
+
+Usage:
+    python generate_reports.py dump_file.mitm [output_dir]
+
+Features:
+- OpenAPI 3.0 specification generation
+- Interactive timeline visualization
+- Professional documentation output
 """
 
 import sys
@@ -16,7 +24,7 @@ from addons.api_timeline import APITimeline
 from parser import FlowParser
 
 
-def generate_reports_from_file(dump_file: str, output_dir: str = None):
+def generate_reports_from_file(dump_file: str, output_dir: str = "output"):
     """Generate enhanced reports from a captured dump file."""
 
     if not Path(dump_file).exists():
@@ -24,6 +32,10 @@ def generate_reports_from_file(dump_file: str, output_dir: str = None):
         return False
 
     print(f"📖 Processing capture file: {dump_file}")
+
+    # Ensure output directory exists
+    output_path = Path(output_dir)
+    output_path.mkdir(exist_ok=True)
 
     # Parse flows from dump file
     parser = FlowParser()
@@ -80,8 +92,9 @@ def generate_reports_from_file(dump_file: str, output_dir: str = None):
     try:
         # Generate API documentation
         if api_extractor.api_catalog:
-            api_extractor.export_documentation("api_docs")
-            print("📚 API documentation generated: api_docs/")
+            api_docs_dir = output_path / "api_docs"
+            api_extractor.export_documentation(str(api_docs_dir))
+            print(f"📚 API documentation generated: {api_docs_dir}/")
         else:
             print("⚠️  No API calls found for documentation")
     except Exception as e:
@@ -91,8 +104,9 @@ def generate_reports_from_file(dump_file: str, output_dir: str = None):
     try:
         # Generate timeline
         if timeline_generator.api_calls:
-            timeline_generator.generate_timeline_files("api_timeline")
-            print("🕒 Timeline generated: api_timeline/timeline.html")
+            timeline_dir = output_path / "api_timeline"
+            timeline_generator.generate_timeline_files(str(timeline_dir))
+            print(f"🕒 Timeline generated: {timeline_dir}/timeline.html")
         else:
             print("⚠️  No API calls found for timeline")
     except Exception as e:
@@ -144,37 +158,43 @@ def create_mock_flow(flow_data: dict):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Generate enhanced reports from existing capture files",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python generate_reports.py capture.mitm
-  python generate_reports.py my_api_session.mitm
-
-This will create:
-  api_docs/          # OpenAPI documentation
-  api_timeline/      # Interactive timeline
-"""
-    )
-
-    parser.add_argument('dump_file', help='Path to the .mitm capture file')
-    parser.add_argument('--output', '-o', help='Output directory (optional)')
-
-    args = parser.parse_args()
-
-    if not args.dump_file:
-        print("❌ Please specify a dump file")
+    """Main entry point for report generation."""
+    if len(sys.argv) < 2:
+        print("Usage: python generate_reports.py <dump_file.mitm> [output_dir]")
+        print("       python generate_reports.py capture_20240101_120000.mitm")
+        print("       python generate_reports.py capture_20240101_120000.mitm custom_output")
         sys.exit(1)
 
-    print("🚀 Generating enhanced reports from existing capture...")
-    success = generate_reports_from_file(args.dump_file, args.output)
+    dump_file = sys.argv[1]
+    output_dir = sys.argv[2] if len(sys.argv) > 2 else "output"
 
-    if success:
-        print("✨ Reports generated successfully!")
-        print("💡 Open api_timeline/timeline.html in your browser")
-    else:
-        print("❌ Some errors occurred during report generation")
+    if not Path(dump_file).exists():
+        print(f"❌ File not found: {dump_file}")
+        sys.exit(1)
+
+    print("🚀 Starting enhanced report generation...")
+    print(f"📁 Input: {dump_file}")
+    print(f"📁 Output: {output_dir}")
+    print()
+
+    try:
+        success = generate_reports_from_file(dump_file, output_dir)
+
+        if success:
+            print()
+            print("🎉 Report generation completed successfully!")
+            print(f"📂 Open reports in: {output_dir}/")
+            print(f"🚀 API Docs: {output_dir}/api_docs/viewer.html")
+            print(f"🕒 Timeline: {output_dir}/api_timeline/timeline.html")
+        else:
+            print("❌ Some reports failed to generate")
+            sys.exit(1)
+
+    except KeyboardInterrupt:
+        print("\n🛑 Report generation interrupted")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ Report generation failed: {e}")
         sys.exit(1)
 
 

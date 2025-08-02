@@ -78,17 +78,18 @@ make run
 make stop
 
 # Results:
-# api_calls_20250102_143022/
-# ├── get_api_airdna_co_v1_search/
-# │   ├── request      # HTTPie command
-# │   └── response.json
-# ├── post_api_airdna_co_v1_analyze/
-# │   ├── request
-# │   └── response.json
-# └── ...
+# output/
+# └── api_calls_20250102_143022/
+#     ├── get_api_airdna_co_v1_search/
+#     │   ├── request      # HTTPie command
+#     │   └── response.json
+#     ├── post_api_airdna_co_v1_analyze/
+#     │   ├── request
+#     │   └── response.json
+#     └── ...
 
 make view
-# 📂 Organized APIs: api_calls_20250102_143022
+# 📂 Organized APIs: output/api_calls_20250102_143022
 # Found 23 API calls:
 #   get_api_airdna_co_v1_search
 #   post_api_airdna_co_v1_analyze
