@@ -126,11 +126,6 @@ class APIExtractor:
         method = flow.request.method.upper()
         path = flow.request.path.lower()
 
-        # Check HTTP method filtering (but be more permissive for APIs)
-        # APIs might use OPTIONS for CORS, so only filter if specifically configured
-        if method == 'OPTIONS' and config.filter_prefetch_requests:
-            return True
-
         if method == 'HEAD' and config.filter_health_checks:
             return True
 
@@ -190,7 +185,7 @@ class APIExtractor:
         domain = parsed_url.netloc
         path = parsed_url.path
         query_params = parse_qs(parsed_url.query)
-        
+
         # Get domain hierarchy information
         domain_info = get_domain_hierarchy(domain)
         root_domain = domain_info['root_domain']
@@ -201,7 +196,7 @@ class APIExtractor:
         # Get API catalog entry (organized by root domain, then full domain)
         root_api = self.api_catalog[root_domain]
         root_api['total_calls'] += 1
-        
+
         api = root_api['domains'][domain]
         api['base_url'] = f"{parsed_url.scheme}://{parsed_url.netloc}"
         api['total_calls'] += 1
@@ -260,11 +255,23 @@ class APIExtractor:
                     param_name = norm_part[1:-1]  # Remove braces
                     params['path'].add(param_name)
 
-        # Header parameters (common API headers)
-        api_headers = ['authorization', 'x-api-key', 'x-auth-token', 'content-type', 'accept']
+        # Header parameters (common API headers + auth) - case insensitive matching
+        api_headers = [
+            'authorization', 'x-api-key', 'x-auth-token', 'x-access-token',
+            'bearer', 'x-csrf-token', 'x-session-token', 'x-request-id',
+            'content-type', 'accept', 'user-agent', 'referer', 'origin'
+        ]
+
+        # Convert request headers to lowercase for case-insensitive matching
+        request_headers_lower = {k.lower(): k for k in flow.request.headers.keys()}
+
         for header in api_headers:
-            if header in flow.request.headers:
+            if header.lower() in request_headers_lower:
                 params['headers'].add(header)
+
+        # Also capture cookie headers for session management
+        if 'cookie' in request_headers_lower:
+            params['headers'].add('cookie')
 
         # Body parameters (if JSON)
         if flow.request.content and flow.request.method in ['POST', 'PUT', 'PATCH']:
@@ -422,7 +429,7 @@ class APIExtractor:
 
                 domain_spec = self._generate_openapi_spec(domain, api_data)
                 domain_file = root_domain_dir / f"{self._sanitize_filename(domain)}.json"
-                
+
                 with open(domain_file, 'w') as f:
                     json.dump(domain_spec, f, indent=2)
 
@@ -469,6 +476,24 @@ class APIExtractor:
                         "in": "header",
                         "name": "X-API-Key",
                         "description": "API key authentication"
+                    },
+                    "cookieAuth": {
+                        "type": "apiKey",
+                        "in": "cookie",
+                        "name": "sessionId",
+                        "description": "Cookie-based session authentication"
+                    },
+                    "csrfAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-CSRF-Token",
+                        "description": "CSRF token authentication"
+                    },
+                    "sessionAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-Session-Token",
+                        "description": "Session token authentication"
                     }
                 }
             },
@@ -496,12 +521,33 @@ class APIExtractor:
 
                 # Add security requirements if auth is detected
                 auth_headers = params.get('headers', set())
-                if any(header in auth_headers for header in ['authorization', 'x-api-key', 'x-auth-token']):
+                auth_detected = any(header in auth_headers for header in [
+                    'authorization', 'x-api-key', 'x-auth-token', 'x-access-token',
+                    'x-csrf-token', 'x-session-token', 'cookie'
+                ])
+
+                if auth_detected:
                     method_spec["security"] = []
+
+                    # Bearer token auth
                     if 'authorization' in auth_headers:
                         method_spec["security"].append({"bearerAuth": []})
-                    if any(header in auth_headers for header in ['x-api-key', 'x-auth-token']):
+
+                    # API key auth
+                    if any(header in auth_headers for header in ['x-api-key', 'x-auth-token', 'x-access-token']):
                         method_spec["security"].append({"apiKeyAuth": []})
+
+                    # Cookie auth
+                    if 'cookie' in auth_headers:
+                        method_spec["security"].append({"cookieAuth": []})
+
+                    # CSRF token auth
+                    if 'x-csrf-token' in auth_headers:
+                        method_spec["security"].append({"csrfAuth": []})
+
+                    # Session token auth
+                    if 'x-session-token' in auth_headers:
+                        method_spec["security"].append({"sessionAuth": []})
 
                 # Query parameters
                 for param in params['query']:
@@ -519,6 +565,31 @@ class APIExtractor:
                         "required": True,
                         "schema": {"type": "string"}
                     })
+
+                # Header parameters with examples from captured requests
+                if method_data['request_examples']:
+                    example_headers = method_data['request_examples'][0].get('headers', {})
+
+                    # Add auth header parameters with actual captured values
+                    for header in ['authorization', 'cookie', 'x-api-key', 'x-auth-token', 'x-csrf-token']:
+                        if header in auth_headers and header in example_headers:
+                            param_spec = {
+                                "name": header,
+                                "in": "header",
+                                "required": True,
+                                "schema": {"type": "string"},
+                                "example": example_headers[header]
+                            }
+
+                            # Add description based on header type
+                            if header == 'authorization':
+                                param_spec["description"] = "Bearer token authentication (captured from MITM)"
+                            elif header == 'cookie':
+                                param_spec["description"] = "Session cookies (captured from MITM)"
+                            else:
+                                param_spec["description"] = f"API authentication token (captured from MITM)"
+
+                            method_spec["parameters"].append(param_spec)
 
                 # Request body (for POST/PUT/PATCH)
                 if method in ['POST', 'PUT', 'PATCH'] and method_data['request_examples']:
@@ -554,7 +625,7 @@ class APIExtractor:
                 spec["paths"][path] = path_spec
 
         return spec
-    
+
     def _generate_combined_openapi_spec(self, root_domain: str, root_api_data: Dict[str, Any]) -> Dict[str, Any]:
         """Generate combined OpenAPI spec for all domains under a root domain."""
         min_calls = config.min_calls_per_endpoint
@@ -580,6 +651,24 @@ class APIExtractor:
                         "in": "header",
                         "name": "X-API-Key",
                         "description": "API key authentication"
+                    },
+                    "cookieAuth": {
+                        "type": "apiKey",
+                        "in": "cookie",
+                        "name": "sessionId",
+                        "description": "Cookie-based session authentication"
+                    },
+                    "csrfAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-CSRF-Token",
+                        "description": "CSRF token authentication"
+                    },
+                    "sessionAuth": {
+                        "type": "apiKey",
+                        "in": "header",
+                        "name": "X-Session-Token",
+                        "description": "Session token authentication"
                     }
                 }
             },
@@ -588,12 +677,12 @@ class APIExtractor:
 
         # Collect all servers
         servers_seen = set()
-        
+
         # Process each domain under this root
         for domain, api_data in root_api_data['domains'].items():
             if api_data['total_calls'] < min_calls:
                 continue
-                
+
             # Add server if not already added
             if api_data['base_url'] and api_data['base_url'] not in servers_seen:
                 spec["servers"].append({"url": api_data['base_url'], "description": domain})
@@ -605,7 +694,7 @@ class APIExtractor:
                 display_path = path
                 if len(root_api_data['domains']) > 1:
                     display_path = f"[{domain}]{path}"
-                
+
                 path_spec = {}
 
                 for method, method_data in endpoint_data['methods'].items():
@@ -626,12 +715,33 @@ class APIExtractor:
 
                     # Add security requirements if auth is detected
                     auth_headers = method_data['parameters'].get('headers', set())
-                    if any(header in auth_headers for header in ['authorization', 'x-api-key', 'x-auth-token']):
+                    auth_detected = any(header in auth_headers for header in [
+                        'authorization', 'x-api-key', 'x-auth-token', 'x-access-token',
+                        'x-csrf-token', 'x-session-token', 'cookie'
+                    ])
+
+                    if auth_detected:
                         method_spec["security"] = []
+
+                        # Bearer token auth
                         if 'authorization' in auth_headers:
                             method_spec["security"].append({"bearerAuth": []})
-                        if any(header in auth_headers for header in ['x-api-key', 'x-auth-token']):
+
+                        # API key auth
+                        if any(header in auth_headers for header in ['x-api-key', 'x-auth-token', 'x-access-token']):
                             method_spec["security"].append({"apiKeyAuth": []})
+
+                        # Cookie auth
+                        if 'cookie' in auth_headers:
+                            method_spec["security"].append({"cookieAuth": []})
+
+                        # CSRF token auth
+                        if 'x-csrf-token' in auth_headers:
+                            method_spec["security"].append({"csrfAuth": []})
+
+                        # Session token auth
+                        if 'x-session-token' in auth_headers:
+                            method_spec["security"].append({"sessionAuth": []})
 
                     # Add parameters
                     params = method_data['parameters']
@@ -652,6 +762,31 @@ class APIExtractor:
                             "required": True,
                             "schema": {"type": "string"}
                         })
+
+                    # Header parameters with examples from captured requests
+                    if method_data['request_examples']:
+                        example_headers = method_data['request_examples'][0].get('headers', {})
+
+                        # Add auth header parameters with actual captured values
+                        for header in ['authorization', 'cookie', 'x-api-key', 'x-auth-token', 'x-csrf-token']:
+                            if header in auth_headers and header in example_headers:
+                                param_spec = {
+                                    "name": header,
+                                    "in": "header",
+                                    "required": True,
+                                    "schema": {"type": "string"},
+                                    "example": example_headers[header]
+                                }
+
+                                # Add description based on header type
+                                if header == 'authorization':
+                                    param_spec["description"] = "Bearer token authentication (captured from MITM)"
+                                elif header == 'cookie':
+                                    param_spec["description"] = "Session cookies (captured from MITM)"
+                                else:
+                                    param_spec["description"] = f"API authentication token (captured from MITM)"
+
+                                method_spec["parameters"].append(param_spec)
 
                     # Request body (for POST/PUT/PATCH)
                     if method in ['POST', 'PUT', 'PATCH'] and method_data['request_examples']:
@@ -716,7 +851,7 @@ class APIExtractor:
         for domain, api_data in sorted(root_api_data['domains'].items()):
             total_calls = api_data['total_calls']
             endpoint_count = len(api_data['endpoints'])
-            
+
             report.extend([
                 f"### {domain}",
                 f"",
@@ -732,11 +867,11 @@ class APIExtractor:
                 endpoint_calls = [(path, sum(m['count'] for m in ep['methods'].values()))
                                 for path, ep in api_data['endpoints'].items()]
                 top_endpoints = sorted(endpoint_calls, key=lambda x: x[1], reverse=True)[:5]
-                
+
                 for path, calls in top_endpoints:
                     methods = list(api_data['endpoints'][path]['methods'].keys())
                     report.append(f"- `{path}` [{', '.join(methods)}]: {calls} calls")
-                
+
                 report.append("")
 
         with open(output_dir / "README.md", 'w') as f:
@@ -820,15 +955,14 @@ class APIExtractor:
         return re.sub(r'[^\w\-.]', '_', name)
 
     def _generate_viewer_html(self, output_path, domains_with_docs):
-        """Generate interactive HTML viewer for all API documentation."""
+        """Generate interactive HTML viewer for all API documentation using Scalar."""
 
-        viewer_html = f'''<!DOCTYPE html>
-<html lang="en">
+        viewer_html = f'''<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation Viewer</title>
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.0.0/swagger-ui.css" />
+    <title>Scalar API Reference</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         body {{
             margin: 0;
@@ -837,69 +971,57 @@ class APIExtractor:
         .header {{
             background: #1f2937;
             color: white;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }}
         .header h1 {{
             margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
         }}
         .api-selector {{
-            background: white;
-            border: 1px solid #d1d5db;
-            border-radius: 0.375rem;
-            padding: 0.5rem;
             font-size: 0.875rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.375rem;
+            border: 1px solid #ccc;
             min-width: 200px;
         }}
-        .stats {{
-            font-size: 0.875rem;
-            opacity: 0.8;
-        }}
-        .swagger-container {{
+        #app {{
             height: calc(100vh - 80px);
         }}
         .loading {{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 50vh;
-            font-size: 1.125rem;
-            color: #6b7280;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
         }}
     </style>
 </head>
+
 <body>
     <div class="header">
-        <div>
-            <h1>🚀 API Documentation (Grouped by Root Domain)</h1>
-            <div class="stats">{len(domains_with_docs)} root domains • {sum(d['total_calls'] for d in domains_with_docs)} total calls</div>
-        </div>
+        <h1>🚀 API Documentation (Grouped by Root Domain)</h1>
         <select class="api-selector" id="apiSelector" onchange="loadAPI()">
             <option value="">Select a root domain to view...</option>
             {chr(10).join(f'<option value="{d["root_domain"]}">{d["title"]} ({d["total_calls"]} calls, {d["domain_count"]} domains)</option>' for d in domains_with_docs)}
         </select>
     </div>
 
-    <div id="swagger-ui" class="swagger-container">
-        <div class="loading">
-            📚 Select a root domain from the dropdown above to view its API documentation
-        </div>
+    <div id="app">
+        <div class="loading">📚 Select a root domain from the dropdown above to view its API documentation</div>
     </div>
 
-    <script src="https://unpkg.com/swagger-ui-dist@5.0.0/swagger-ui-bundle.js"></script>
+    <!-- Load the Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
 
+    <!-- Initialize the Scalar API Reference -->
     <script>
-        let ui;
-
         function loadAPI() {{
             const selector = document.getElementById('apiSelector');
             const selectedRootDomain = selector.value;
 
             if (!selectedRootDomain) {{
-                document.getElementById('swagger-ui').innerHTML =
+                document.getElementById('app').innerHTML =
                     '<div class="loading">📚 Select a root domain from the dropdown above to view its API documentation</div>';
                 return;
             }}
@@ -908,25 +1030,19 @@ class APIExtractor:
             const sanitizedDomain = selectedRootDomain.replace(/[^\\w\\-_.]/g, '_');
             const specUrl = `./${{sanitizedDomain}}/openapi.json`;
 
-            if (ui) {{
-                ui.specActions.updateSpec('');
-            }}
+            // Clear the container
+            document.getElementById('app').innerHTML = '';
 
-                                    ui = SwaggerUIBundle({{
+            // Create Scalar API reference
+            Scalar.createApiReference('#app', {{
                 url: specUrl,
-                dom_id: '#swagger-ui',
-                deepLinking: true,
-                presets: [
-                    SwaggerUIBundle.presets.apis,
-                    SwaggerUIBundle.presets.standalone
-                ],
-                onComplete: function() {{
-                    console.log('API documentation loaded for root domain:', selectedRootDomain);
-                }},
-                onFailure: function(err) {{
-                    console.error('Failed to load API spec:', err);
-                    document.getElementById('swagger-ui').innerHTML =
-                        '<div class="loading">❌ Failed to load API documentation for ' + selectedRootDomain + '</div>';
+                proxyUrl: 'https://proxy.scalar.com',
+                theme: 'default',
+                showSidebar: true,
+                searchHotKey: 'k',
+                metaData: {{
+                    title: `API Documentation: ${{selectedRootDomain}}`,
+                    description: `Generated API documentation for ${{selectedRootDomain}} and subdomains`
                 }}
             }});
         }}
