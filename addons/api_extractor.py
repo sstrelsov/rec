@@ -85,6 +85,10 @@ class APIExtractor:
         if not config.api_extractor_enabled:
             return
 
+        # Check if request should be included based on configuration
+        if not self._should_include_request(flow):
+            return
+
         # Skip ads/analytics traffic first
         if self._is_blocked_traffic(flow):
             return
@@ -120,6 +124,26 @@ class APIExtractor:
                 return True
 
         return False
+
+    def _should_include_request(self, flow: http.HTTPFlow) -> bool:
+        """Determine if request should be included based on configuration."""
+        method = flow.request.method.upper()
+
+        # Check HTTP method filtering
+        if method not in config.http_methods:
+            return False
+
+        # Check context-based filtering
+        context = detect_request_context(flow)
+
+        if context == RequestContext.BROWSER and not config.include_browser_requests:
+            return False
+        if context == RequestContext.FRONTEND_BACKEND and not config.include_api_requests:
+            return False
+        if context == RequestContext.UNKNOWN and not config.include_unknown_requests:
+            return False
+
+        return True
 
     def _is_filtered_noise(self, flow: http.HTTPFlow) -> bool:
         """Check if request should be filtered as noise based on config."""
@@ -224,9 +248,10 @@ class APIExtractor:
         """Normalize API path by replacing dynamic segments."""
         normalized = path
 
-        # Apply ID patterns
+        # Apply ID patterns - match entire path segments
         for pattern, replacement in self.common_id_patterns:
-            normalized = re.sub(f'/{pattern}', f'/{replacement}', normalized)
+            # Match entire path segments that fit the pattern
+            normalized = re.sub(f'/({pattern})(?=/|$)', f'/{replacement}', normalized)
 
         # Handle query parameters in path (shouldn't happen but...)
         normalized = normalized.split('?')[0]
@@ -243,6 +268,13 @@ class APIExtractor:
         # Query parameters
         for param_name in query_params.keys():
             params['query'].add(param_name)
+        
+        # Store query parameter examples
+        if 'query_examples' not in method_data:
+            method_data['query_examples'] = {}
+        for param_name, param_values in query_params.items():
+            if param_values:  # Only store if there are values
+                method_data['query_examples'][param_name] = param_values[0]  # Use first value
 
         # Path parameters (compare normalized vs original)
         if normalized_path != original_path:
@@ -250,24 +282,35 @@ class APIExtractor:
             norm_parts = normalized_path.split('/')
             orig_parts = original_path.split('/')
 
+            # Store path parameter examples
+            if 'path_examples' not in method_data:
+                method_data['path_examples'] = {}
+
             for i, (norm_part, orig_part) in enumerate(zip(norm_parts, orig_parts)):
                 if norm_part.startswith('{') and norm_part.endswith('}'):
                     param_name = norm_part[1:-1]  # Remove braces
                     params['path'].add(param_name)
+                    # Store the actual value as example
+                    method_data['path_examples'][param_name] = orig_part
 
         # Header parameters (common API headers + auth) - case insensitive matching
-        api_headers = [
-            'authorization', 'x-api-key', 'x-auth-token', 'x-access-token',
-            'bearer', 'x-csrf-token', 'x-session-token', 'x-request-id',
-            'content-type', 'accept', 'user-agent', 'referer', 'origin'
+        common_headers = [
+            'authorization', 'bearer', 'content-type', 'accept', 
+            'user-agent', 'referer', 'origin'
         ]
 
         # Convert request headers to lowercase for case-insensitive matching
         request_headers_lower = {k.lower(): k for k in flow.request.headers.keys()}
 
-        for header in api_headers:
+        # Add common headers
+        for header in common_headers:
             if header.lower() in request_headers_lower:
                 params['headers'].add(header)
+        
+        # Add all x-* headers (API keys, tokens, custom headers)
+        for header_lower, original_header in request_headers_lower.items():
+            if header_lower.startswith('x-'):
+                params['headers'].add(header_lower)
 
         # Also capture cookie headers for session management
         if 'cookie' in request_headers_lower:
@@ -549,36 +592,49 @@ class APIExtractor:
                     if 'x-session-token' in auth_headers:
                         method_spec["security"].append({"sessionAuth": []})
 
-                # Query parameters
+                # Query parameters with examples
+                query_examples = method_data.get('query_examples', {})
                 for param in params['query']:
-                    method_spec["parameters"].append({
+                    param_spec = {
                         "name": param,
                         "in": "query",
                         "schema": {"type": "string"}
-                    })
+                    }
+                    # Add example value if available
+                    if param in query_examples:
+                        param_spec["example"] = query_examples[param]
+                    method_spec["parameters"].append(param_spec)
 
-                # Path parameters
+                # Path parameters with examples
+                path_examples = method_data.get('path_examples', {})
                 for param in params['path']:
-                    method_spec["parameters"].append({
+                    param_spec = {
                         "name": param,
                         "in": "path",
                         "required": True,
                         "schema": {"type": "string"}
-                    })
+                    }
+                    # Add example value if available
+                    if param in path_examples:
+                        param_spec["example"] = path_examples[param]
+                    method_spec["parameters"].append(param_spec)
 
                 # Header parameters with examples from captured requests
                 if method_data['request_examples']:
                     example_headers = method_data['request_examples'][0].get('headers', {})
+                    # Create case-insensitive header lookup
+                    example_headers_lower = {k.lower(): v for k, v in example_headers.items()}
 
                     # Add auth header parameters with actual captured values
-                    for header in ['authorization', 'cookie', 'x-api-key', 'x-auth-token', 'x-csrf-token']:
-                        if header in auth_headers and header in example_headers:
+                    auth_header_patterns = ['authorization', 'cookie']
+                    for header in auth_header_patterns:
+                        if header in auth_headers and header in example_headers_lower:
                             param_spec = {
                                 "name": header,
                                 "in": "header",
                                 "required": True,
                                 "schema": {"type": "string"},
-                                "example": example_headers[header]
+                                "example": example_headers_lower[header]
                             }
 
                             # Add description based on header type
@@ -586,9 +642,20 @@ class APIExtractor:
                                 param_spec["description"] = "Bearer token authentication (captured from MITM)"
                             elif header == 'cookie':
                                 param_spec["description"] = "Session cookies (captured from MITM)"
-                            else:
-                                param_spec["description"] = f"API authentication token (captured from MITM)"
 
+                            method_spec["parameters"].append(param_spec)
+                    
+                    # Add all x-* headers that were captured
+                    for header in auth_headers:
+                        if header.startswith('x-') and header in example_headers_lower:
+                            param_spec = {
+                                "name": header,
+                                "in": "header",
+                                "required": True,
+                                "schema": {"type": "string"},
+                                "example": example_headers_lower[header],
+                                "description": f"API authentication header (captured from MITM)"
+                            }
                             method_spec["parameters"].append(param_spec)
 
                 # Request body (for POST/PUT/PATCH)
@@ -746,36 +813,49 @@ class APIExtractor:
                     # Add parameters
                     params = method_data['parameters']
 
-                    # Query parameters
+                    # Query parameters with examples
+                    query_examples = method_data.get('query_examples', {})
                     for param in params['query']:
-                        method_spec["parameters"].append({
+                        param_spec = {
                             "name": param,
                             "in": "query",
                             "schema": {"type": "string"}
-                        })
+                        }
+                        # Add example value if available
+                        if param in query_examples:
+                            param_spec["example"] = query_examples[param]
+                        method_spec["parameters"].append(param_spec)
 
-                    # Path parameters
+                    # Path parameters with examples
+                    path_examples = method_data.get('path_examples', {})
                     for param in params['path']:
-                        method_spec["parameters"].append({
+                        param_spec = {
                             "name": param,
                             "in": "path",
                             "required": True,
                             "schema": {"type": "string"}
-                        })
+                        }
+                        # Add example value if available
+                        if param in path_examples:
+                            param_spec["example"] = path_examples[param]
+                        method_spec["parameters"].append(param_spec)
 
                     # Header parameters with examples from captured requests
                     if method_data['request_examples']:
                         example_headers = method_data['request_examples'][0].get('headers', {})
+                        # Create case-insensitive header lookup
+                        example_headers_lower = {k.lower(): v for k, v in example_headers.items()}
 
                         # Add auth header parameters with actual captured values
-                        for header in ['authorization', 'cookie', 'x-api-key', 'x-auth-token', 'x-csrf-token']:
-                            if header in auth_headers and header in example_headers:
+                        auth_header_patterns = ['authorization', 'cookie']
+                        for header in auth_header_patterns:
+                            if header in auth_headers and header in example_headers_lower:
                                 param_spec = {
                                     "name": header,
                                     "in": "header",
                                     "required": True,
                                     "schema": {"type": "string"},
-                                    "example": example_headers[header]
+                                    "example": example_headers_lower[header]
                                 }
 
                                 # Add description based on header type
@@ -783,9 +863,20 @@ class APIExtractor:
                                     param_spec["description"] = "Bearer token authentication (captured from MITM)"
                                 elif header == 'cookie':
                                     param_spec["description"] = "Session cookies (captured from MITM)"
-                                else:
-                                    param_spec["description"] = f"API authentication token (captured from MITM)"
 
+                                method_spec["parameters"].append(param_spec)
+                        
+                        # Add all x-* headers that were captured
+                        for header in auth_headers:
+                            if header.startswith('x-') and header in example_headers_lower:
+                                param_spec = {
+                                    "name": header,
+                                    "in": "header", 
+                                    "required": True,
+                                    "schema": {"type": "string"},
+                                    "example": example_headers_lower[header],
+                                    "description": f"API authentication header (captured from MITM)"
+                                }
                                 method_spec["parameters"].append(param_spec)
 
                     # Request body (for POST/PUT/PATCH)

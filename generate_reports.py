@@ -65,13 +65,13 @@ def generate_reports_from_file(dump_file: str, output_dir: str = "output"):
 
             # Process through API extractor
             try:
-                # Skip ads/analytics
-                if not api_extractor._is_blocked_traffic(mock_flow):
-                    # Skip noise (OPTIONS, etc.)
-                    if not api_extractor._is_filtered_noise(mock_flow):
-                        if api_extractor._is_api_request(mock_flow):
-                            api_extractor._extract_api_info(mock_flow)
-                            api_count += 1
+                # Use consistent filtering logic with live capture
+                if api_extractor._should_include_request(mock_flow):
+                    if not api_extractor._is_blocked_traffic(mock_flow):
+                        if not api_extractor._is_filtered_noise(mock_flow):
+                            if api_extractor._is_api_request(mock_flow):
+                                api_extractor._extract_api_info(mock_flow)
+                                api_count += 1
             except Exception as e:
                 print(f"⚠️  API extraction error: {e}")
 
