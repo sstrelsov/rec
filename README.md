@@ -1,27 +1,27 @@
-# 🕵️ mitmtool - Elegant Network Traffic Capture
+# Henry the Navigator - Network Traffic Analysis Tool
 
-A streamlined Python tool for capturing and analyzing network traffic using mitmproxy. **Now with enhanced features** including automatic OpenAPI documentation, interactive timelines, and real-time analysis!
+A professional Python-based network traffic capture and analysis system using mitmproxy. Henry the Navigator charts uncharted digital waters by automatically generating comprehensive API documentation, interactive timelines, and real-time traffic analysis from browser sessions.
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-# 1. Start enhanced capturing (proxy + capture + analysis)
-make run          # ✨ NEW: Includes API docs + timeline + filtering
+# Start traffic capture with automatic analysis
+make run
 
-# 2. Browse normally - all traffic is captured automatically
+# Browse normally - all traffic is captured automatically
 
-# 3. Stop and auto-generate all reports
-make stop         # ✨ NEW: Auto-generates OpenAPI docs + timeline
+# Stop capture and generate comprehensive reports
+make stop
 
-# 4. View results (multiple options now!)
-make viewer       # 🚀 Interactive API documentation (Swagger UI)
-make open-timeline# 🕒 Chronological timeline of API calls
-make view         # 📁 Browse organized results (original)
+# View results
+make viewer       # Interactive API documentation (Swagger UI)
+make open-timeline # Chronological timeline of API calls
+make view         # Browse organized results by domain
 ```
 
-> 📖 **Complete guide:** See [addons.md](addons.md) for full enhanced features documentation
+**Complete documentation:** See [addons.md](addons.md) for enhanced features reference.
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Install mitmproxy
@@ -29,119 +29,121 @@ brew install mitmproxy
 
 # Install certificate (one-time setup)
 make run
-# Visit http://mitm.it in your browser → Download & install certificate
+# Visit http://mitm.it in your browser to download and install certificate
 # Then stop: make stop
 ```
 
-## 🛠️ Commands
+## Commands
 
 | Command | Description |
 |---------|-------------|
-| `make run` | ✨ Enhanced capture (API docs + timeline + analysis) |
-| `make stop` | Stop capture & auto-generate all reports |
-| `make viewer` | 🚀 Interactive API documentation (Swagger UI) |
-| `make open-timeline` | 🕒 Chronological timeline of API calls |
-| `make view` | 📁 Browse organized results (original) |
-| `make config` | ⚙️ Show current configuration |
-| `make status` | Check current status |
-| `make basic` | 🔧 Run in basic mode (no enhancements) |
-| `make clean` | Remove all files |
+| `make run` | Start enhanced capture with API documentation and timeline generation |
+| `make stop` | Stop capture and auto-generate all reports |
+| `make viewer` | Open interactive API documentation (Swagger UI) |
+| `make open-timeline` | Open chronological timeline of API calls |
+| `make view` | Browse organized results by domain |
+| `make config` | Show current configuration |
+| `make status` | Check current capture status |
+| `make basic` | Run in basic mode (no enhanced features) |
+| `make clean` | Remove all output files |
 
-## 💡 What Makes This Elegant
+## Core Features
 
-### Core Elegance
-- **Unified commands**: `make run` handles proxy + capture automatically
-- **Smart organization**: APIs organized by domain with executable commands
-- **Zero configuration**: Works out of the box with sensible defaults
-- **Clean interface**: Simple commands for the complete workflow
+### Traffic Organization
+- **Domain-based structure**: APIs automatically organized by base domain
+- **Executable commands**: Each request saved as HTTPie command for replay
+- **Zero configuration**: Works immediately with sensible defaults
+- **Clean workflow**: Simple commands handle complete capture-to-analysis pipeline
 
-### ✨ Enhanced Features (NEW!)
-- **📚 OpenAPI documentation**: Auto-generates Swagger specs from live traffic
-- **🕒 Interactive timeline**: Chronological visualization of API interactions
-- **📊 Real-time analysis**: Live monitoring with performance insights
-- **🚫 Smart filtering**: Automatically blocks ads/analytics noise
-- **🎯 Professional output**: Documentation that rivals official API docs
+### Enhanced Analysis
+- **OpenAPI documentation**: Auto-generates professional Swagger specifications from live traffic
+- **Interactive timeline**: Chronological visualization of all API interactions
+- **Real-time monitoring**: Live analysis with performance insights during capture
+- **Smart filtering**: Automatically excludes advertising and analytics noise
+- **Professional output**: Documentation quality that rivals official API specifications
 
-## 📊 What You Get
+## Output Structure
 
-- **Organized API calls** in separate directories
-- **Executable HTTPie commands** for each request
-- **JSON responses** saved for analysis
-- **Smart filtering** by domain, method, status
-- **Traffic summaries** with timing and size data
+Henry organizes captured traffic into a clear hierarchy:
 
-## 🔍 Example Workflow
+- **Domain-separated API calls** in individual directories
+- **Executable HTTPie commands** for request reproduction
+- **Complete JSON responses** for analysis
+- **Smart filtering** by domain, HTTP method, and response status
+- **Traffic summaries** with timing and payload size data
+
+## Example Session
 
 ```bash
-# Capture AirDNA traffic
+# Analyze Airbnb's API structure
 make run
-# Browse AirDNA.co normally...
+# Navigate Airbnb.com normally...
 make stop
 
-# Results:
+# Generated structure:
 # output/
-# └── api_calls_20250102_143022/
-#     ├── get_api_airdna_co_v1_search/
-#     │   ├── request      # HTTPie command
-#     │   └── response.json
-#     ├── post_api_airdna_co_v1_analyze/
-#     │   ├── request
-#     │   └── response.json
-#     └── ...
+# └── airbnb.com/
+#     ├── get_stayspdpsections_token_2025-08-02_21-51-05_008/
+#     │   ├── request.json    # HTTPie command
+#     │   ├── response.json   # API response
+#     │   ├── auth.txt        # Authentication details
+#     │   └── metadata.json   # Request metadata
+#     └── post_authenticate_2025-08-02_21-50-12_003/
+#         ├── request.json
+#         └── response.json
 
 make view
-# 📂 Organized APIs: output/api_calls_20250102_143022
-# Found 23 API calls:
-#   get_api_airdna_co_v1_search
-#   post_api_airdna_co_v1_analyze
-#   ...
+# Organized APIs: output/
+# Found 47 API calls across 3 domains:
+#   airbnb.com: 23 calls
+#   api.openai.com: 12 calls
+#   github.com: 12 calls
 ```
 
-## 🎯 Advanced Usage
+## Advanced Usage
 
 ```bash
-# Python interface (if needed)
+# Direct Python interface
 python mitmtool.py run --output custom.mitm
-python mitmtool.py view --input custom.mitm --domain airdna
-python mitmtool.py organize --input custom.mitm --output my_apis
+python mitmtool.py view --input custom.mitm --domain airbnb
+python mitmtool.py organize --input custom.mitm --output my_analysis
 
-# Filter and search
+# Domain-specific filtering
 python mitmtool.py view --domain api.openai.com
 ```
 
-## ⚙️ Configuration
+## Configuration
 
-Configure basic settings by editing `.env` file:
+Customize behavior by editing the configuration file:
 
 ```bash
-# Output directory for all generated files
+# Primary settings in config.toml
 OUTPUT_DIR=output
-
-# Port for the API documentation viewer server
 VIEWER_PORT=8000
 ```
 
-Check current settings: `make config`
+View current configuration: `make config`
 
-## 🔧 Architecture
+## Architecture
 
 ```
-mitmtool.py        # Main CLI entry point
-├── config.py        # Configuration loader (.env file)
-├── proxy_manager.py # macOS proxy control
-├── capture.py       # Traffic capture, viewing & organization
-├── parser.py        # Flow parsing & analysis
-└── makefile         # Simple workflow commands
+mitmtool.py        # Main CLI interface
+├── config.py        # Configuration management (TOML-based)
+├── proxy_manager.py # macOS proxy system control
+├── capture.py       # Traffic capture and organization
+├── parser.py        # Flow parsing and analysis
+├── generate_reports.py # Enhanced reporting system
+└── makefile         # Workflow automation
 ```
 
-## 🚨 Security Notes
+## Security Considerations
 
-- Captures ALL browser traffic including sensitive data
-- Always run `make stop` when finished
-- Be mindful of certificate warnings
-- Use separate browser profiles for analysis
+- **Comprehensive capture**: Records ALL browser traffic including sensitive data
+- **Session management**: Always execute `make stop` when analysis complete
+- **Certificate management**: Monitor for certificate warnings in browser
+- **Isolation recommended**: Consider using dedicated browser profiles for analysis
 
 ---
 
-**🔗 Need the certificate?** → http://mitm.it
-**❓ Need help?** → `make help`
+**Certificate installation:** http://mitm.it  
+**Help and documentation:** `make help`
