@@ -1,0 +1,271 @@
+#!/usr/bin/env python3
+"""
+rec - Record and inspect HTTP traffic for a domain.
+
+Usage:
+    rec on [domain]   Start recording (optionally filtered to domain)
+    rec off           Stop recording
+    rec view          Show capture directory
+    rec status        Check if recording
+"""
+
+import argparse
+import os
+import signal
+import sys
+from pathlib import Path
+
+from proxy_manager import ProxyManager
+from capture import TrafficCapture
+from domain_utils import parse_domain_input
+
+REC_DIR = Path(os.environ.get("REC_DIR", "~/.rec")).expanduser()
+PID_FILE = REC_DIR / ".pid"
+ACTIVE_FILE = REC_DIR / ".active"
+
+
+def cmd_on(args):
+    """Start recording traffic."""
+    # Check if already recording
+    if PID_FILE.exists():
+        try:
+            pid = int(PID_FILE.read_text().strip())
+            os.kill(pid, 0)  # Check if process is alive
+            domain = ACTIVE_FILE.read_text().strip() if ACTIVE_FILE.exists() else "all"
+            print(f"Already recording ({domain}). Run 'rec off' first.")
+            return 1
+        except (ProcessLookupError, ValueError):
+            # Stale PID file, clean up
+            _cleanup_state()
+
+    # Parse domain
+    domain = None
+    if args.domain:
+        domain = parse_domain_input(args.domain)
+
+    label = domain or "all"
+    output_dir = str(REC_DIR / label)
+
+    # Set env vars for addons
+    if domain:
+        os.environ["HENRY_DOMAINS"] = domain
+    os.environ["HENRY_OUTPUT_DIR"] = output_dir
+
+    # Ensure base directory exists
+    REC_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Enable proxy
+    proxy = ProxyManager()
+    if not proxy.enable_proxy():
+        print("Failed to enable proxy.")
+        return 1
+
+    print(f"Recording {label} -> {output_dir}")
+
+    # Launch capture (blocks until Ctrl+C)
+    capture = TrafficCapture()
+
+    # Write state files before blocking
+    _write_state(os.getpid(), label)
+
+    # Register cleanup for when capture ends
+    original_sigint = signal.getsignal(signal.SIGINT)
+
+    def cleanup_handler(signum, frame):
+        print("\nStopping...")
+        capture.stop_capture()
+        proxy.disable_proxy()
+        _cleanup_state()
+        print(f"Stopped. Captures in {output_dir}")
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, cleanup_handler)
+    signal.signal(signal.SIGTERM, cleanup_handler)
+
+    success = capture.start_capture(output_dir)
+
+    # If start_capture returns (process ended), clean up
+    proxy.disable_proxy()
+    _cleanup_state()
+
+    if not success:
+        print(f"Capture failed.")
+        return 1
+
+    print(f"Stopped. Captures in {output_dir}")
+    return 0
+
+
+def cmd_off(args):
+    """Stop recording traffic."""
+    if not PID_FILE.exists():
+        print("Not recording.")
+        return 1
+
+    try:
+        pid = int(PID_FILE.read_text().strip())
+    except ValueError:
+        _cleanup_state()
+        print("Not recording (cleaned up stale state).")
+        return 1
+
+    domain = ACTIVE_FILE.read_text().strip() if ACTIVE_FILE.exists() else "all"
+    output_dir = str(REC_DIR / domain)
+
+    # Kill the capture process
+    try:
+        os.kill(pid, signal.SIGTERM)
+        print(f"Stopped recording.")
+    except ProcessLookupError:
+        print("Process already stopped.")
+
+    # Disable proxy
+    proxy = ProxyManager()
+    proxy.disable_proxy()
+
+    # Clean up state
+    _cleanup_state()
+
+    print(f"Captures in {output_dir}")
+    return 0
+
+
+def cmd_view(args):
+    """Show capture directories."""
+    if ACTIVE_FILE.exists():
+        try:
+            pid = int(PID_FILE.read_text().strip()) if PID_FILE.exists() else None
+            if pid:
+                os.kill(pid, 0)
+                domain = ACTIVE_FILE.read_text().strip()
+                print(f"Currently recording: {REC_DIR / domain}")
+                return 0
+        except (ProcessLookupError, ValueError):
+            pass
+
+    # List all capture directories sorted by modification time (latest first)
+    if not REC_DIR.exists():
+        print(f"No captures yet. Run 'rec on' to start.")
+        return 0
+
+    dirs = [
+        d for d in REC_DIR.iterdir()
+        if d.is_dir() and not d.name.startswith('.')
+    ]
+
+    if not dirs:
+        print(f"No captures yet. Run 'rec on' to start.")
+        return 0
+
+    dirs.sort(key=lambda d: d.stat().st_mtime, reverse=True)
+
+    print("Captures:")
+    for d in dirs:
+        # Count subdirectories (call recordings)
+        call_dirs = [c for c in d.iterdir() if c.is_dir()]
+        mitm_files = list(d.glob("*.mitm"))
+        parts = []
+        if call_dirs:
+            parts.append(f"{len(call_dirs)} calls")
+        if mitm_files:
+            parts.append(f"{len(mitm_files)} captures")
+        detail = f" ({', '.join(parts)})" if parts else ""
+        print(f"  {d}{detail}")
+
+    return 0
+
+
+def cmd_status(args):
+    """Check recording status."""
+    if not PID_FILE.exists():
+        print("Not recording.")
+        return 0
+
+    try:
+        pid = int(PID_FILE.read_text().strip())
+        os.kill(pid, 0)
+        domain = ACTIVE_FILE.read_text().strip() if ACTIVE_FILE.exists() else "all"
+        output_dir = REC_DIR / domain
+        print(f"Recording {domain} (pid {pid})")
+        print(f"Output: {output_dir}")
+        return 0
+    except (ProcessLookupError, ValueError):
+        _cleanup_state()
+        print("Not recording (cleaned up stale state).")
+        return 0
+
+
+def _write_state(pid: int, domain: str):
+    """Write PID and active domain state files."""
+    REC_DIR.mkdir(parents=True, exist_ok=True)
+    PID_FILE.write_text(str(pid))
+    ACTIVE_FILE.write_text(domain)
+
+
+def _cleanup_state():
+    """Remove PID and active domain state files."""
+    PID_FILE.unlink(missing_ok=True)
+    ACTIVE_FILE.unlink(missing_ok=True)
+
+
+def create_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="rec",
+        description="Record and inspect HTTP traffic for a domain.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""\
+Examples:
+  rec on nytimes.com    Record traffic for nytimes.com
+  rec on              Record all traffic
+  rec off             Stop recording
+  rec view            Show capture directories
+  rec status          Check if recording
+""",
+    )
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    on_parser = subparsers.add_parser("on", help="Start recording")
+    on_parser.add_argument("domain", nargs="?", default=None,
+                           help="Domain to filter (e.g. nytimes.com)")
+
+    subparsers.add_parser("off", help="Stop recording")
+    subparsers.add_parser("view", help="Show capture directories")
+    subparsers.add_parser("status", help="Check if recording")
+
+    return parser
+
+
+def main():
+    parser = create_parser()
+    args = parser.parse_args()
+
+    if not args.command:
+        print("rec - Record and inspect HTTP traffic\n")
+        print("  rec on [domain]   Start recording")
+        print("  rec off           Stop recording")
+        print("  rec view          Show captures")
+        print("  rec status        Check status")
+        print("\nRun 'rec --help' for details.")
+        return
+
+    commands = {
+        "on": cmd_on,
+        "off": cmd_off,
+        "view": cmd_view,
+        "status": cmd_status,
+    }
+
+    try:
+        handler = commands[args.command]
+        sys.exit(handler(args))
+    except KeyboardInterrupt:
+        print("\nInterrupted.")
+        sys.exit(0)
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
