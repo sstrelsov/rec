@@ -112,9 +112,9 @@ class Config:
     def output_dir(self) -> str:
         """Directory where captured data will be saved.
 
-        Priority: HENRY_OUTPUT_DIR env var > config file > default (~/.rec)
+        Priority: REC_OUTPUT_DIR env var > config file > default (~/.rec)
         """
-        env_dir = os.environ.get("HENRY_OUTPUT_DIR")
+        env_dir = os.environ.get("REC_OUTPUT_DIR")
         if env_dir:
             return env_dir
         return self.config["general"].get("output_dir", str(REC_DIR))
@@ -123,10 +123,10 @@ class Config:
     def target_domains(self) -> List[str]:
         """Target domains to filter traffic to.
 
-        Read from HENRY_DOMAINS env var (comma-separated).
+        Read from REC_DOMAINS env var (comma-separated).
         Empty list means capture all traffic.
         """
-        env_domains = os.environ.get("HENRY_DOMAINS", "")
+        env_domains = os.environ.get("REC_DOMAINS", "")
         if env_domains:
             return [d.strip() for d in env_domains.split(",") if d.strip()]
         return []

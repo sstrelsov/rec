@@ -1,0 +1,13 @@
+[project]
+name = "rec"
+version = "0.1.0"
+description = "Record and inspect HTTP traffic for a domain"
+requires-python = ">=3.10"
+dependencies = ["mitmproxy>=10.0.0"]
+
+[tool.setuptools]
+py-modules = ["rec_cli", "capture", "config", "proxy_manager", "domain_utils"]
+packages = ["addons"]
+
+[project.scripts]
+rec = "rec_cli:main"

@@ -57,7 +57,7 @@ class TrafficRecorder:
         try:
             self._record_traffic(flow)
         except Exception as e:
-            print(f"⚠️  Traffic recording failed for {flow.request.pretty_url}: {e}")
+            print(f"warning: recording failed for {flow.request.pretty_url}: {e}")
 
     def _is_blocked_traffic(self, flow: http.HTTPFlow) -> bool:
         """Check if this traffic should be blocked (ads/analytics)."""

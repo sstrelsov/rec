@@ -48,8 +48,8 @@ def cmd_on(args):
 
     # Set env vars for addons
     if domain:
-        os.environ["HENRY_DOMAINS"] = domain
-    os.environ["HENRY_OUTPUT_DIR"] = output_dir
+        os.environ["REC_DOMAINS"] = domain
+    os.environ["REC_OUTPUT_DIR"] = output_dir
 
     # Ensure base directory exists
     REC_DIR.mkdir(parents=True, exist_ok=True)

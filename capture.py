@@ -56,9 +56,9 @@ class TrafficCapture:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         capture_file = str(output_path / f"capture_{timestamp}.mitm")
 
-        print(f"Starting traffic capture...")
-        print(f"Output: {output_dir}")
-        print(f"Proxy:  {self.proxy_host}:{self.proxy_port}")
+        print("recording")
+        print(f"  output: {output_dir}")
+        print(f"  proxy:  {self.proxy_host}:{self.proxy_port}")
         print("Press Ctrl+C to stop.")
 
         if not self.check_mitmproxy_available():
@@ -121,12 +121,10 @@ class TrafficCapture:
                     print("mitmdump failed to start (no error details)")
                 return False
 
-            print("Capture started.")
-
             try:
                 for line in iter(self.mitmdump_process.stdout.readline, ''):
                     if line:
-                        print(f"  {line.strip()}")
+                        print(line.strip())
                 self.mitmdump_process.wait()
             except KeyboardInterrupt:
                 signal_handler(signal.SIGINT, None)
