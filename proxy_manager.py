@@ -31,16 +31,16 @@ class ProxyManager:
                     services.append(line.strip())
             return services
         except subprocess.CalledProcessError as e:
-            print(f"❌ Error getting network services: {e}")
+            print(f"error: getting network services: {e}")
             return []
 
     def enable_proxy(self) -> bool:
         """Enable HTTP/HTTPS proxy for all network services."""
-        print(f"🔧 Enabling proxy {self.proxy_host}:{self.proxy_port}...")
+        print(f"proxy: enabling {self.proxy_host}:{self.proxy_port}")
 
         services = self.get_network_services()
         if not services:
-            print("❌ No network services found")
+            print("error: no network services found")
             return False
 
         success = True
@@ -58,25 +58,21 @@ class ProxyManager:
                     self.proxy_host, str(self.proxy_port)
                 ], check=True, capture_output=True)
 
-                print(f"✅ Enabled proxy for: {service}")
+                print(f"  + {service}")
 
             except subprocess.CalledProcessError as e:
-                print(f"⚠️  Failed to set proxy for {service}: {e}")
+                print(f"warning: failed to set proxy for {service}: {e}")
                 success = False
-
-        if success:
-            print(f"🎉 Proxy enabled! Browser traffic will route through {self.proxy_host}:{self.proxy_port}")
-            print("💡 Make sure mitmproxy certificate is installed in your browser")
 
         return success
 
     def disable_proxy(self) -> bool:
         """Disable HTTP/HTTPS proxy for all network services."""
-        print("🔧 Disabling proxy...")
+        print("proxy: disabling")
 
         services = self.get_network_services()
         if not services:
-            print("❌ No network services found")
+            print("error: no network services found")
             return False
 
         success = True
@@ -92,14 +88,11 @@ class ProxyManager:
                     "networksetup", "-setsecurewebproxystate", service, "off"
                 ], check=True, capture_output=True)
 
-                print(f"✅ Disabled proxy for: {service}")
+                print(f"  - {service}")
 
             except subprocess.CalledProcessError as e:
-                print(f"⚠️  Failed to disable proxy for {service}: {e}")
+                print(f"warning: failed to disable proxy for {service}: {e}")
                 success = False
-
-        if success:
-            print("🎉 Proxy disabled! Browser traffic restored to normal")
 
         return success
 
@@ -109,11 +102,9 @@ class ProxyManager:
         Returns:
             List of tuples: (service_name, is_enabled, server, port)
         """
-        print("🔍 Checking proxy status...")
-
         services = self.get_network_services()
         if not services:
-            print("❌ No network services found")
+            print("error: no network services found")
             return []
 
         status_list = []
@@ -138,12 +129,12 @@ class ProxyManager:
                 status_list.append((service, enabled, server, port))
 
                 if enabled:
-                    print(f"🟢 {service}: ENABLED ({server}:{port})")
+                    print(f"  on  {service} ({server}:{port})")
                 else:
-                    print(f"🔴 {service}: DISABLED")
+                    print(f"  off {service}")
 
             except subprocess.CalledProcessError as e:
-                print(f"⚠️  Error checking {service}: {e}")
+                print(f"warning: error checking {service}: {e}")
                 status_list.append((service, False, "", ""))
 
         return status_list

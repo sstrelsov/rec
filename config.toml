@@ -1,25 +1,21 @@
 # =============================================================================
-# mitmtool Configuration
+# rec - Configuration
 # =============================================================================
-# This file controls traffic capture, filtering, and display behavior.
-# Modify settings here to customize your mitm proxy experience.
+# This file controls traffic capture and filtering behavior.
+# Place at ~/.rec/config.toml to override defaults.
 #
-# After making changes, restart mitmtool for settings to take effect.
+# After making changes, restart rec for settings to take effect.
 # =============================================================================
 
 [general]
-# Directory where captured data (timeline, API docs) will be saved
-output_dir = "output"
-
-# Port for the built-in documentation viewer (http://localhost:port)
-viewer_port = 8000
+# Base directory for captures (default: ~/.rec)
+# output_dir = "~/.rec"
 
 [filtering]
 # =============================================================================
 # HTTP Methods - Which request types to capture
 # =============================================================================
 # Available methods: GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, TRACE, CONNECT
-# Commonly used subset is selected by default for cleaner capture
 http_methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
 # =============================================================================
@@ -32,7 +28,6 @@ include_unknown_requests = true    # Requests that don't fit other categories
 # =============================================================================
 # Noise Reduction - Filter out common clutter
 # =============================================================================
-# Enable these filters to focus on meaningful traffic
 filter_static_assets = true       # Images, CSS, JS, fonts, icons (.css, .js, .png, etc.)
 filter_browser_housekeeping = true # Browser metadata (favicon.ico, robots.txt, manifest.json)
 filter_health_checks = true       # Service monitoring endpoints (/ping, /healthz, /status)
@@ -42,7 +37,6 @@ filter_prefetch_requests = true   # Browser optimization requests (prefetch, pre
 # Ad & Analytics Blocking - Traffic to completely filter out
 # =============================================================================
 # Requests matching these patterns will be blocked and not captured.
-# Add your own patterns to customize filtering behavior.
 #
 # Pattern matching rules:
 # - Matches against full URL, hostname, and path
@@ -94,23 +88,3 @@ blocked_patterns = [
     "/pixel.gif", "/collect?", "/tr?", "/ads/", "/ad/", "/tracking",
     "/analytics", "/metrics", "/telemetry", "/beacon", "/ping"
 ]
-
-
-[timeline]
-# =============================================================================
-# Timeline Display Settings
-# =============================================================================
-auto_refresh = false               # Automatically refresh timeline view
-default_items_per_page = 50       # Number of requests to show per page
-show_response_times = true         # Display request duration times
-show_context_icons = true          # Show icons indicating request type (browser/API/unknown)
-
-[api_extractor]
-# =============================================================================
-# API Documentation Generation
-# =============================================================================
-enabled = true                     # Generate OpenAPI-style documentation from captured traffic
-min_calls_per_endpoint = 1         # Minimum requests needed before endpoint appears in docs
-max_examples_per_endpoint = 3      # Maximum request/response examples to include per endpoint
-include_request_headers = true     # Include HTTP headers in generated documentation
-include_response_examples = true   # Include response body examples in documentation
