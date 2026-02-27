@@ -6,8 +6,6 @@ Manages mitmdump subprocess for traffic capture with domain-scoped addons.
 """
 
 import subprocess
-import signal
-import sys
 import time
 from pathlib import Path
 from datetime import datetime
@@ -95,14 +93,6 @@ class TrafficCapture:
                 universal_newlines=True,
             )
 
-            def signal_handler(signum, frame):
-                print("\nStopping capture...")
-                self.stop_capture()
-                print(f"Saved to: {output_dir}")
-                sys.exit(0)
-
-            signal.signal(signal.SIGINT, signal_handler)
-
             time.sleep(2)
 
             if self.mitmdump_process.poll() is not None:
@@ -121,13 +111,10 @@ class TrafficCapture:
                     print("mitmdump failed to start (no error details)")
                 return False
 
-            try:
-                for line in iter(self.mitmdump_process.stdout.readline, ''):
-                    if line:
-                        print(line.strip())
-                self.mitmdump_process.wait()
-            except KeyboardInterrupt:
-                signal_handler(signal.SIGINT, None)
+            for line in iter(self.mitmdump_process.stdout.readline, ''):
+                if line:
+                    print(line.strip())
+            self.mitmdump_process.wait()
 
         except Exception as e:
             print(f"Error starting capture: {e}")

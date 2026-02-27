@@ -11,6 +11,7 @@ Usage:
 
 import argparse
 import os
+import shutil
 import signal
 import sys
 from pathlib import Path
@@ -195,6 +196,28 @@ def cmd_status(args):
         return 0
 
 
+def cmd_clear(args):
+    """Remove all recorded captures."""
+    if not REC_DIR.exists():
+        print("Nothing to clear.")
+        return 0
+
+    dirs = [
+        d for d in REC_DIR.iterdir()
+        if d.is_dir() and not d.name.startswith('.')
+    ]
+
+    if not dirs:
+        print("Nothing to clear.")
+        return 0
+
+    for d in dirs:
+        shutil.rmtree(d)
+
+    print(f"Cleared {len(dirs)} capture(s).")
+    return 0
+
+
 def _write_state(pid: int, domain: str):
     """Write PID and active domain state files."""
     REC_DIR.mkdir(parents=True, exist_ok=True)
@@ -220,6 +243,7 @@ Examples:
   rec off             Stop recording
   rec view            Show capture directories
   rec status          Check if recording
+  rec clear           Remove all recordings
 """,
     )
 
@@ -232,6 +256,7 @@ Examples:
     subparsers.add_parser("off", help="Stop recording")
     subparsers.add_parser("view", help="Show capture directories")
     subparsers.add_parser("status", help="Check if recording")
+    subparsers.add_parser("clear", help="Remove all recordings")
 
     return parser
 
@@ -246,6 +271,7 @@ def main():
         print("  rec off           Stop recording")
         print("  rec view          Show captures")
         print("  rec status        Check status")
+        print("  rec clear         Remove all recordings")
         print("\nRun 'rec --help' for details.")
         return
 
@@ -254,6 +280,7 @@ def main():
         "off": cmd_off,
         "view": cmd_view,
         "status": cmd_status,
+        "clear": cmd_clear,
     }
 
     try:
