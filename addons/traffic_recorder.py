@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import config
-from domain_utils import extract_root_domain
+from domain_utils import extract_root_domain, matches_target_domains
 
 
 class TrafficRecorder:
@@ -38,6 +38,10 @@ class TrafficRecorder:
 
     def response(self, flow: http.HTTPFlow):
         """Process completed requests and record them."""
+        # Skip traffic not matching target domains
+        if not matches_target_domains(flow.request.pretty_host, config.target_domains):
+            return
+
         # Skip ads/analytics traffic first
         if self._is_blocked_traffic(flow):
             return

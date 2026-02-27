@@ -1,273 +1,75 @@
-# MITMPROXY CAPTURE TOOL - .gitignore
-# ===========================================
-# This file prevents sensitive captured data from being committed to git
+# rec - .gitignore
 
-# ========================================
-# CAPTURED DATA (NEVER COMMIT!)
-# ========================================
-# These contain sensitive information like:
-# - Authentication tokens and API keys
-# - Personal data and private information
-# - Proprietary API responses
-# - Session cookies and credentials
-
-# Raw mitmproxy dump files
+# Captured data (sensitive - never commit)
 *.mitm
-
-# Organized API capture directories
-api_calls/
-api_calls_*/
-
-# Individual response files (may contain sensitive data)
-# **/response*
-# **/request_body.json
-
-# ========================================
-# MITMPROXY STATUS & LOG FILES
-# ========================================
-# Temporary files created during operation
-
-# Capture logs
-capture.log
 *.log
 
-# Status tracking files
+# Status files
+.pid
+.active
 .last_capture
 .last_organized
 .mitmdump.pid
 
-# mitmproxy configuration and certificates
+# mitmproxy
 .mitmproxy/
 mitmproxy-ca-cert.pem
+
+# Output directories
 output/
 
-# ========================================
-# PYTHON
-# ========================================
-# Standard Python ignore patterns
-
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
 *.egg-info/
-.installed.cfg
 *.egg
+.installed.cfg
 MANIFEST
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
 .tox/
 .nox/
 .coverage
 .coverage.*
 .cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
 .pytest_cache/
+.mypy_cache/
+htmlcov/
 
 # Virtual environments
 .env
 .venv
 env/
 venv/
-ENV/
-env.bak/
-venv.bak/
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# ========================================
-# OPERATING SYSTEM
-# ========================================
 
 # macOS
 .DS_Store
-.AppleDouble
-.LSOverride
-Icon
 ._*
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
 
-# Windows
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-*.tmp
-*.temp
-Desktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
-
-# Linux
-*~
-.fuse_hidden*
-.directory
-.Trash-*
-.nfs*
-
-# ========================================
-# IDEs & EDITORS
-# ========================================
-
-# Visual Studio Code
+# IDEs
 .vscode/
-*.code-workspace
-
-# PyCharm
 .idea/
-*.iws
-*.iml
-*.ipr
-
-# Sublime Text
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-
-# Vim
 *.swp
 *.swo
-*~
-.netrwhist
 
-# Emacs
-\#*\#
-/.emacs.desktop
-/.emacs.desktop.lock
-*.elc
-auto-save-list
-tramp
-.\#*
-
-# ========================================
-# SECRETS & CONFIGURATION
-# ========================================
-# Files that might contain sensitive configuration
-
-# Environment files
-.env
+# Secrets
 .env.local
 .env.*.local
-
-# Configuration files that might contain secrets
-config.json
 secrets.json
-.secrets
 credentials.json
-
-# SSL certificates (if any)
 *.pem
 *.key
 *.crt
-*.cert
 
-# ========================================
-# ARCHIVES & BACKUPS
-# ========================================
-
-# Compressed files
+# Archives
 *.7z
-*.dmg
 *.gz
-*.iso
-*.jar
-*.rar
 *.tar
 *.zip
-
-# Backup files
 *.bak
-*.backup
-*.old
 
-# ========================================
-# EXAMPLE SAFE FILES TO COMMIT
-# ========================================
-# These are the files you SHOULD commit:
-
-# Core tool files:
-# - mitmtool.py
-# - organize_api_calls.py
-# - Makefile
-# - README.md
-# - .gitignore
-# - requirements.txt (if created)
-
-# Documentation:
-# - docs/
-# - examples/ (with dummy/anonymized data only)
-
-# ========================================
-# FORCE INCLUDE EXAMPLES (if needed)
-# ========================================
-# If you want to include example/demo files, uncomment these:
-
-# !examples/
-# !examples/**/*.json
-# !docs/
-# !docs/**/*
-
-# But make sure example files contain NO real:
-# - API keys or tokens
-# - Personal information
-# - Real domain names or URLs
-# - Actual response data
-# User configuration
-.env
+# Examples directory
+examples/

@@ -25,6 +25,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import config
+from domain_utils import matches_target_domains
 from addons.context_detector import detect_request_context, RequestContext, get_context_info
 
 
@@ -72,6 +73,10 @@ class TrafficAnalyzer:
         if not ctx.options.traffic_analyzer_enabled:
             return
 
+        # Skip traffic not matching target domains
+        if not matches_target_domains(flow.request.pretty_host, config.target_domains):
+            return
+
         # Skip ads/analytics traffic
         if self._is_blocked_traffic(flow):
             return
@@ -85,6 +90,10 @@ class TrafficAnalyzer:
     def response(self, flow: http.HTTPFlow):
         """Process completed responses."""
         if not ctx.options.traffic_analyzer_enabled:
+            return
+
+        # Skip traffic not matching target domains
+        if not matches_target_domains(flow.request.pretty_host, config.target_domains):
             return
 
         # Skip ads/analytics traffic
