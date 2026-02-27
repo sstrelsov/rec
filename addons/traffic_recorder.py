@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import config
-from domain_utils import extract_root_domain, matches_target_domains
+from domain_utils import extract_root_domain, matches_target_domains, is_blocked_traffic
 
 
 class TrafficRecorder:
@@ -43,7 +43,7 @@ class TrafficRecorder:
             return
 
         # Skip ads/analytics traffic first
-        if self._is_blocked_traffic(flow):
+        if is_blocked_traffic(flow, config.blocked_patterns):
             return
 
         # Apply configurable noise filtering
@@ -58,25 +58,6 @@ class TrafficRecorder:
             self._record_traffic(flow)
         except Exception as e:
             print(f"warning: recording failed for {flow.request.pretty_url}: {e}")
-
-    def _is_blocked_traffic(self, flow: http.HTTPFlow) -> bool:
-        """Check if this traffic should be blocked (ads/analytics)."""
-        url = flow.request.pretty_url.lower()
-        host = flow.request.pretty_host.lower()
-        path = flow.request.path.lower()
-
-        # Check against blocked patterns
-        for pattern in config.blocked_patterns:
-            if pattern in url or pattern in host or pattern in path:
-                return True
-
-        # Check for tracking query parameters
-        tracking_params = ['utm_', 'fbclid', 'gclid', '_ga', 'mc_', 'mkt_']
-        for param in tracking_params:
-            if param in url:
-                return True
-
-        return False
 
     def _is_filtered_noise(self, flow: http.HTTPFlow) -> bool:
         """Check if request should be filtered as noise based on config."""

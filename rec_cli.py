@@ -14,6 +14,7 @@ import os
 import shutil
 import signal
 import sys
+import time
 from pathlib import Path
 
 from proxy_manager import ProxyManager
@@ -50,6 +51,8 @@ def cmd_on(args):
     # Set env vars for addons
     if domain:
         os.environ["REC_DOMAINS"] = domain
+    else:
+        os.environ.pop("REC_DOMAINS", None)
     os.environ["REC_OUTPUT_DIR"] = output_dir
 
     # Ensure base directory exists
@@ -70,8 +73,6 @@ def cmd_on(args):
     _write_state(os.getpid(), label)
 
     # Register cleanup for when capture ends
-    original_sigint = signal.getsignal(signal.SIGINT)
-
     def cleanup_handler(signum, frame):
         print("\nStopping...")
         capture.stop_capture()
@@ -113,12 +114,20 @@ def cmd_off(args):
     domain = ACTIVE_FILE.read_text().strip() if ACTIVE_FILE.exists() else "all"
     output_dir = str(REC_DIR / domain)
 
-    # Kill the capture process
+    # Kill the capture process and wait for it to die
     try:
         os.kill(pid, signal.SIGTERM)
+        for _ in range(10):
+            time.sleep(0.5)
+            try:
+                os.kill(pid, 0)
+            except OSError:
+                break
         print(f"Stopped recording.")
     except ProcessLookupError:
         print("Process already stopped.")
+    except OSError as e:
+        print(f"Could not stop process {pid}: {e}")
 
     # Disable proxy
     proxy = ProxyManager()
@@ -139,8 +148,7 @@ def cmd_view(args):
             if pid:
                 os.kill(pid, 0)
                 domain = ACTIVE_FILE.read_text().strip()
-                print(f"Currently recording: {REC_DIR / domain}")
-                return 0
+                print(f"Currently recording: {domain}")
         except (ProcessLookupError, ValueError):
             pass
 
@@ -198,6 +206,16 @@ def cmd_status(args):
 
 def cmd_clear(args):
     """Remove all recorded captures."""
+    # Refuse to clear while recording is active
+    if PID_FILE.exists():
+        try:
+            pid = int(PID_FILE.read_text().strip())
+            os.kill(pid, 0)
+            print("Recording in progress. Run 'rec off' first.")
+            return 1
+        except (ProcessLookupError, ValueError, OSError):
+            _cleanup_state()
+
     if not REC_DIR.exists():
         print("Nothing to clear.")
         return 0

@@ -126,6 +126,29 @@ def matches_target_domains(hostname: str, target_domains: List[str]) -> bool:
     return False
 
 
+def is_blocked_traffic(flow, blocked_patterns: List[str]) -> bool:
+    """Check if a flow should be blocked (ads/analytics/tracking).
+
+    Args:
+        flow: mitmproxy HTTP flow
+        blocked_patterns: list of substring patterns to block
+    """
+    url = flow.request.pretty_url.lower()
+    host = flow.request.pretty_host.lower()
+    path = flow.request.path.lower()
+
+    for pattern in blocked_patterns:
+        if pattern in url or pattern in host or pattern in path:
+            return True
+
+    tracking_params = ['utm_', 'fbclid', 'gclid', '_ga', 'mc_', 'mkt_']
+    for param in tracking_params:
+        if param in url:
+            return True
+
+    return False
+
+
 def get_domain_hierarchy(hostname: str) -> dict:
     """
     Get domain hierarchy information for grouping.

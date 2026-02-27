@@ -15,14 +15,11 @@ from mitmproxy import http, ctx
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import config
-from domain_utils import matches_target_domains
+from domain_utils import matches_target_domains, is_blocked_traffic
 
 
 class TrafficAnalyzer:
     """Real-time one-line-per-request logging addon."""
-
-    def __init__(self):
-        self.flows_count = 0
 
     def load(self, loader):
         """Configure addon options."""
@@ -39,7 +36,7 @@ class TrafficAnalyzer:
         if not matches_target_domains(flow.request.pretty_host, config.target_domains):
             return
 
-        if self._is_blocked_traffic(flow):
+        if is_blocked_traffic(flow, config.blocked_patterns):
             return
 
         flow.request.analyzer_start_time = time.time()
@@ -52,10 +49,8 @@ class TrafficAnalyzer:
         if not matches_target_domains(flow.request.pretty_host, config.target_domains):
             return
 
-        if self._is_blocked_traffic(flow):
+        if is_blocked_traffic(flow, config.blocked_patterns):
             return
-
-        self.flows_count += 1
 
         # Calculate response time
         start_time = getattr(flow.request, 'analyzer_start_time', None)
@@ -75,23 +70,6 @@ class TrafficAnalyzer:
             url = url[:77] + "..."
 
         print(f"{method:<6} {status:<3}  {elapsed_ms:>6.0f}ms  {url}")
-
-    def _is_blocked_traffic(self, flow: http.HTTPFlow) -> bool:
-        """Check if this traffic should be blocked (ads/analytics)."""
-        url = flow.request.pretty_url.lower()
-        host = flow.request.pretty_host.lower()
-        path = flow.request.path.lower()
-
-        for pattern in config.blocked_patterns:
-            if pattern in url or pattern in host or pattern in path:
-                return True
-
-        tracking_params = ['utm_', 'fbclid', 'gclid', '_ga', 'mc_', 'mkt_']
-        for param in tracking_params:
-            if param in url:
-                return True
-
-        return False
 
 
 # Register the addon

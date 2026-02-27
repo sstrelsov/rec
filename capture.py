@@ -65,7 +65,7 @@ class TrafficCapture:
         try:
             # Kill any existing mitmdump processes
             try:
-                subprocess.run(["pkill", "-f", "mitmdump"], capture_output=True)
+                subprocess.run(["pkill", "mitmdump"], capture_output=True)
                 time.sleep(1)
             except Exception:
                 pass

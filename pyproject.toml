@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "rec"
 version = "0.1.0"
@@ -8,6 +12,9 @@ dependencies = ["mitmproxy>=10.0.0"]
 [tool.setuptools]
 py-modules = ["rec_cli", "capture", "config", "proxy_manager", "domain_utils"]
 packages = ["addons"]
+
+[tool.setuptools.package-data]
+"" = ["config.toml"]
 
 [project.scripts]
 rec = "rec_cli:main"
