@@ -49,6 +49,9 @@ venv/
 .DS_Store
 ._*
 
+# Claude Code
+CLAUDE.md
+
 # IDEs
 .vscode/
 .idea/
